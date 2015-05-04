@@ -196,16 +196,16 @@ App.page('index',function(){
         var $btnMusic = $('.volume_medium'),audio,n=0;
         audio = document.createElement("audio");
         audio.src = "music/bg.mp3";
-		var mySwiper = new Swiper('.swiper_container',{
-			mode:'vertical',
-			centeredSlides: true,
-			slidesPerView: 5,
-			watchActiveIndex: true,
-			pagination:'.swiper_wrapper',
-			paginationElementClass: 'slide_mask',
-			paginationClickable: true
-		});
-	
+        var mySwiper = new Swiper('.swiper_container',{
+            mode:'vertical',
+            centeredSlides: true,
+            slidesPerView: 5,
+            watchActiveIndex: true,
+            pagination:'.swiper_wrapper',
+            paginationElementClass: 'slide_mask',
+            paginationClickable: true
+        });
+
         if (audio != null && audio.canPlayType && audio.canPlayType("audio/mpeg"))
         {
             audio.play();
@@ -214,12 +214,12 @@ App.page('index',function(){
             }, false);
             //$(audio).insertAfter($btnMusic);
         }
-		$("#index_section").on("touchstart",function(){
-			if(n==0){
-				audio.play();
-				n++;
-			}
-		});
+        $("#index_section").on("touchstart",function(){
+            if(n==0){
+                audio.play();
+                n++;
+            }
+        });
         $btnMusic.on(" touchstart",function(){
             if(n%2 == 0){
                 $btnMusic.addClass('volume_no');
@@ -231,14 +231,14 @@ App.page('index',function(){
             }
             n++;
         });
-		$(document).on("visibilitychange",function(){
+        $(document).on("visibilitychange",function(){
             if(document.hidden){
                 audio.pause();
             }
             else{
-				if(n%2 == 0){               
-					audio.play();
-				}
+                if(n%2 == 0){
+                    audio.play();
+                }
             }
             //console.log(document.hidden);
         });
@@ -248,146 +248,146 @@ App.page('index',function(){
 App.page('partner',function(){
     this.init = function(){
         console.log("这里是partner");
-        partnerBd._init();     
-		var count = 1;	
+        partnerBd._init();
+        var count = 1;
         $('#mySite').click(function(){
             //J.showToast('正在获取我的位置');
             J.showMask("Positioning..");
             partnerBd.clickSite = true;
-			count = 1;
+            count = 1;
             partnerBd.getSite(partnerBd.mainMap);
         });
         $('#btn_search').on("touchstart",function(event){
-			var _self = partnerBd,cityData={},cityNum = _self.currentCityNum;
-			cityData.searre= _self.cityArr;
-			
-			$('#partner_search_article').show();
-			$(".search_pt").css("opactiy","0");
+            var _self = partnerBd,cityData={},cityNum = _self.currentCityNum;
+            cityData.searre= _self.cityArr;
+
+            $('#partner_search_article').show();
+            $(".search_pt").css("opactiy","0");
             J.anim("#partner_search_article","opacityIn",function(){
-				$(".search_pt").css("opactiy","1");
+                $(".search_pt").css("opactiy","1");
                 //J.anim(".search_pt","slideUpIn");
-				J.tmpl(".search_lis",'search_template',cityData,"replace");
-				setTimeout(function(){					
-					if(cityData.isGPS){
-						$(".search_lis").addClass("search_lis_GPS");
-					}
-				},300);
-				_self.searchArr = _self.cityArr;
+                J.tmpl(".search_lis",'search_template',cityData,"replace");
+                setTimeout(function(){
+                    if(cityData.isGPS){
+                        $(".search_lis").addClass("search_lis_GPS");
+                    }
+                },300);
+                _self.searchArr = _self.cityArr;
             });
-            
+
         });
-		$('#tag_close_popup').on("touchstart",function(event){
-			var _self = partnerBd;
+        $('#tag_close_popup').on("touchstart",function(event){
+            var _self = partnerBd;
             J.anim(".search_pt","slideDownOut",function(){
                 $('#partner_search_article').hide();
                 J.anim("#partner_search_article","opacityOut");
             });
-			
+
         });
-		$('#partnerLis').on("touchstart",function(event){
+        $('#partnerLis').on("touchstart",function(event){
             var num,item;
             item = $(event.target).parents('.partner_item');
             num =parseInt($($(item).find('.rank')).text()) - 1;
-            partnerBd._current = num;          
+            partnerBd._current = num;
         });
 
-		$('.search_lis').on("touchstart",function(event){
-			var num,item,_self= partnerBd;
+        $('.search_lis').on("touchstart",function(event){
+            var num,item,_self= partnerBd;
             item = $(event.target).parents('.search_item');
             num =$(item).index();
-			if(_self.searchArr[num].isCity){
-				_self.searchCity = _self.searchArr[num].city;
-				_self._resultLocal = findCityPartners(_self.searchCity,_self.partnerArr);
-			}else{
-				_self._current = 0;
-				_self._resultLocal = [];
-				_self._resultLocal.push(_self.searchArr[num]);
-			}
-			
-		});
-		$('.search_input').change(function(event){
-			var word = $(this).val(),lis={searre:0},_self = partnerBd;
-			if(word!==""){
-				_self.searchArr = lis.searre = searchWord(word,_self.cityArr,_self.partnerArr);
-				
-			}else{
-				_self.searchArr = lis.searre= _self.cityArr;
-			}
-			J.tmpl(".search_lis",'search_template',lis,"replace");
-			setTimeout(function(){
-				J.Scroll('.search_result');
-			},100);
-		});
-		$('.btn_search_input').on('touchstart',function(){
-			var word = $(this).val(),lis={searre:0},_self = partnerBd;
-			if(word!==""){
-				_self.searchArr = lis.searre = searchWord(word,_self.cityArr,_self.partnerArr);
-				
-			}else{
-				_self.searchArr = lis.searre= _self.cityArr;
-			}
-			J.tmpl(".search_lis",'search_template',lis,"replace");
-			setTimeout(function(){
-				J.Scroll('.search_result');
-			},100);
-		});
-		$('.btn_more').on('touchstart',function(){			
-			var _self = partnerBd,result10 = {},resultlast = _self.lastPartner,resultlastPart = resultlast.partners,
+            if(_self.searchArr[num].isCity){
+                _self.searchCity = _self.searchArr[num].city;
+                _self._resultLocal = findCityPartners(_self.searchCity,_self.partnerArr);
+            }else{
+                _self._current = 0;
+                _self._resultLocal = [];
+                _self._resultLocal.push(_self.searchArr[num]);
+            }
+
+        });
+        $('.search_input').change(function(event){
+            var word = $(this).val(),lis={searre:0},_self = partnerBd;
+            if(word!==""){
+                _self.searchArr = lis.searre = searchWord(word,_self.cityArr,_self.partnerArr);
+
+            }else{
+                _self.searchArr = lis.searre= _self.cityArr;
+            }
+            J.tmpl(".search_lis",'search_template',lis,"replace");
+            setTimeout(function(){
+                J.Scroll('.search_result');
+            },100);
+        });
+        $('.btn_search_input').on('touchstart',function(){
+            var word = $(this).val(),lis={searre:0},_self = partnerBd;
+            if(word!==""){
+                _self.searchArr = lis.searre = searchWord(word,_self.cityArr,_self.partnerArr);
+
+            }else{
+                _self.searchArr = lis.searre= _self.cityArr;
+            }
+            J.tmpl(".search_lis",'search_template',lis,"replace");
+            setTimeout(function(){
+                J.Scroll('.search_result');
+            },100);
+        });
+        $('.btn_more').on('touchstart',function(){
+            var _self = partnerBd,result10 = {},resultlast = _self.lastPartner,resultlastPart = resultlast.partners,
                 sectionID = "partner",i,partTemp,point,iconObj = _self.defaultIconObj,map=_self.mainMap,showNum = _self.showPartnerNum,mark,count ;
-			_self.lastCount = _self.lastCount + 1;
-			count = _self.lastCount;
-			result10.partners = [];
-			result10.clickable = _self.clickSite;
-			if(resultlastPart.length<=showNum){
-				result10.partners = resultlastPart;
-				$('.'+_self.showLastClass).hide();
-			}else{
-				result10.partners = resultlastPart.splice(0,showNum);
-				console.log(result10.partners);
-			}
-			for(i = 0;i<result10.partners.length;i++){
-				partTemp = result10.partners[i];
-				point = new BMap.Point(partTemp.lng,partTemp.lat);
-				mark = addMarker(iconObj,point,map);
-				mark.addEventListener("click",markEvent(i+10*count)); 
-			}
-			J.tmpl('#'+sectionID+'Lis',sectionID+'_template',result10,"add");
-			setTimeout(function(){
-				J.Scroll($('#'+sectionID+'_article'));   
-			},400);
-		});
+            _self.lastCount = _self.lastCount + 1;
+            count = _self.lastCount;
+            result10.partners = [];
+            result10.clickable = _self.clickSite;
+            if(resultlastPart.length<=showNum){
+                result10.partners = resultlastPart;
+                $('.'+_self.showLastClass).hide();
+            }else{
+                result10.partners = resultlastPart.splice(0,showNum);
+                console.log(result10.partners);
+            }
+            for(i = 0;i<result10.partners.length;i++){
+                partTemp = result10.partners[i];
+                point = new BMap.Point(partTemp.lng,partTemp.lat);
+                mark = addMarker(iconObj,point,map);
+                mark.addEventListener("click",markEvent(i+10*count));
+            }
+            J.tmpl('#'+sectionID+'Lis',sectionID+'_template',result10,"add");
+            setTimeout(function(){
+                J.Scroll($('#'+sectionID+'_article'));
+            },400);
+        });
     }
-	this.show = function(){
-		//console.log("dd");
-		var _self = partnerBd;
-		_self.findnear = 0;
-		if(_self._resultLocal.length&&_self._resultLocal[0].cityNum!=_self.currentCityNum){
-			//console.log("dd");
-			_self._resultLocal = findCityPartners(_self.currentCityNum,_self.partnerArr);
-		}
-	}
+    this.show = function(){
+        //console.log("dd");
+        var _self = partnerBd;
+        _self.findnear = 0;
+        if(_self._resultLocal.length&&_self._resultLocal[0].cityNum!=_self.currentCityNum){
+            //console.log("dd");
+            _self._resultLocal = findCityPartners(_self.currentCityNum,_self.partnerArr);
+        }
+    }
 });
 
 App.page('partner_list',function(){
-	this.init = function(){
-		$('#partnerListLis').on("touchstart",function(event){
+    this.init = function(){
+        $('#partnerListLis').on("touchstart",function(event){
             var num,item;
             item = $(event.target).parents('.partner_list_item');
-            num =parseInt($($(item).find('.rank')).text()) - 1;          
-            partnerBd._current = num;          
+            num =parseInt($($(item).find('.rank')).text()) - 1;
+            partnerBd._current = num;
         });
-	}
-	this.show = function(){
-		var result = {},_self = partnerBd;
-		result.city = _self.searchCity;
-		result.partners = _self._resultLocal;
-		J.tmpl(".partner_list_lis" ,"partner_list_template" ,result,"replace");
-	}
+    }
+    this.show = function(){
+        var result = {},_self = partnerBd;
+        result.city = _self.searchCity;
+        result.partners = _self._resultLocal;
+        J.tmpl(".partner_list_lis" ,"partner_list_template" ,result,"replace");
+    }
 });
 
 App.page('partner_detail',function(){
     this.init = function(){
-		
+
         console.log("这里是partner_detail");
         Share.init("partner",partnerBd);
         J.Refresh({
@@ -414,42 +414,54 @@ App.page('partner_detail',function(){
         });
 
     };
-    
-	this.show = function(){
-		var map = new BMap.Map("partmap"),current,local,_self = partnerBd;
-		if(_self.findnear){
-			_self.nearestPart(map,function(){
-				current = _self._current;			
-				local = _self._resultLocal;
-				console.log(_self._resultLocal);
-				partnerReflash(map,current,local);
-				_self._maxLen = local.length;
-				//_self.findnear = 0;
-			});
-		}else{
-			current = _self._current;			
-			local = _self._resultLocal;
-			partnerReflash(map,current,local);
-			_self._maxLen = local.length;
-		}
-	}
-	function partnerReflash(map,current,local,isbus){
-		var current =current||partnerBd._current;		
-		var local = local||partnerBd._resultLocal;
-		var map = map|| new BMap.Map("partmap");
-		var icon,_self = partnerBd,point,origin = partnerBd.mySitePoint,isbus = isbus||0,mark,routePoiFun;
-		point = new BMap.Point(local[current].lng,local[current].lat);
-		if(origin.lng&&origin.lat){
-			map.centerAndZoom(origin, 12);
-			if(local[current].distance){
-				if(local[current].distance>10000){
-					isbus = 2;
-				}
-				else if(local[current].distance>1000){
-					isbus = 1;
-				}
-			}
+
+    this.show = function(){
+        var map = new BMap.Map("partmap"),current,local,_self = partnerBd;
+        if(_self.findnear){
+            _self.nearestPart(map,function(){
+                current = _self._current;
+                local = _self._resultLocal;
+                console.log(_self._resultLocal);
+                partnerReflash(map,current,local);
+                _self._maxLen = local.length;
+                //_self.findnear = 0;
+            });
+        }else{
+            current = _self._current;
+            local = _self._resultLocal;
+            partnerReflash(map,current,local);
+            _self._maxLen = local.length;
+        }
+    }
+    function partnerReflash(map,current,local,isbus){
+        var current =current||partnerBd._current;
+        var local = local||partnerBd._resultLocal;
+        var map = map|| new BMap.Map("partmap");
+        var icon,_self = partnerBd,point,origin = partnerBd.mySitePoint,isbus = isbus||0,mark,routePoiFun;
+        point = new BMap.Point(local[current].lng,local[current].lat);
+        if(origin.lng&&origin.lat){
+            map.centerAndZoom(origin, 12);
+            if(local[current].distance){
+                if(local[current].distance>10000){
+                    isbus = 2;
+                }
+                else if(local[current].distance>1000){
+                    isbus = 1;
+                }
+            }
             routePoiFun = _self.routePolicy(map,origin,point,isbus);
+            routePoiFun.setSearchCompleteCallback(function(results){
+                var des,ori;
+                if(results.getNumPlans()==0){
+                    if(current<11){
+                        des = addMarker(_self.levelBIconObj[current],point,map);
+                    }else{
+                        des = addMarker(_self.defaultBIconObj,point,map);
+                    }
+                    des.setOffset(new BMap.Size(0,34));
+                    ori = addMarker(_self.mySiteIconObj,origin,map);
+                }
+            });
             routePoiFun.setMarkersSetCallback(function(pois){
                 var i =0,len = pois.length,that = _self,icon1,icon2,icon1Obj = that.mySiteIconObj,icon2Obj ;
                 icon1 =new BMap.Icon(icon1Obj.url, new BMap.Size(icon1Obj.w*2,icon1Obj.h*2));
@@ -475,31 +487,31 @@ App.page('partner_detail',function(){
             });
 
 
-			_self.showInfoWinSearch(map,local[current]);
-		}
-		else{
-			map.centerAndZoom(point, 16);
-			if(current<11){
-				mark = addMarker(_self.levelBIconObj[current],point,map);
-			}else{
-				mark = addMarker(_self.defaultBIconObj,point,map);
-			}
-			mark.setOffset(new BMap.Size(0,34));
-			_self.showInfoWinSearch(map,local[current]);
-			
-		}
+            _self.showInfoWinSearch(map,local[current]);
+        }
+        else{
+            map.centerAndZoom(point, 16);
+            if(current<11){
+                mark = addMarker(_self.levelBIconObj[current],point,map);
+            }else{
+                mark = addMarker(_self.defaultBIconObj,point,map);
+            }
+            mark.setOffset(new BMap.Size(0,34));
+            _self.showInfoWinSearch(map,local[current]);
+
+        }
         console.log(local[current]);
         J.tmpl(".detail_content" ,"partner_content_template" ,local[current],"replace");
-		/*$('.tit_partner').text(local[current].name);
-        $('.de_par_time').text(local[current].duration);
-        $('.detail_content .mes2 span').text(local[current].phone);
-        $('.btn_tele').attr("href","tel:"+local[current].phone);
-        $('.detail_content .mes1').text(local[current].address);
-        $('.detail_content .mes3').text(local[current].desc);*/
+        /*$('.tit_partner').text(local[current].name);
+         $('.de_par_time').text(local[current].duration);
+         $('.detail_content .mes2 span').text(local[current].phone);
+         $('.btn_tele').attr("href","tel:"+local[current].phone);
+         $('.detail_content .mes1').text(local[current].address);
+         $('.detail_content .mes3').text(local[current].desc);*/
         setTimeout(function(){
             J.Scroll("#partner_detail_article");
         },300);
-	}
+    }
 
 
 });
@@ -515,7 +527,7 @@ App.page('souvenir',function(){
         $.ajax({
             url : url,
             timeout : 20000,
-			dataType : 'jsonp',
+            dataType : 'jsonp',
             success : function(data){
                 //data = JSON.parse(data);
                 Souvenir.data =data;
@@ -569,12 +581,12 @@ App.page('souvenir_detail',function(){
                 }
                 mess = array.join("%0d%0a");
                 $(this)[0].href="mailto:administracion.info@davidwine.es"+"?subject="+subject+"&Body="+mess;
-				J.showToast("发送中...");
-				setTimeout(function(){
-					//$(this)[0].href="http://www.baidu.com";
-					$("#souvenir_form_section").removeClass("active");
-				},500);
-				
+                J.showToast("发送中...");
+                setTimeout(function(){
+                    //$(this)[0].href="http://www.baidu.com";
+                    $("#souvenir_form_section").removeClass("active");
+                },500);
+
             }else{
                 for(i = 0;i<array.length;i++){
                     if(!inputLis[i]){
@@ -605,19 +617,19 @@ App.page('souvenir_detail',function(){
         J.tmpl(".souvenir_item_wrap",'souvenir_detail_template',Souvenir.data.data[Souvenir.current],"replace");
         setTimeout(function(){
             slider = new J.Slider({
-                    selector : '#slidePics',
-                    showDots : false,
-                    onBeforeSlide : function(){
-						console.log($(this));
-                        return true;
-                    },
-                    onAfterSlide : function(i){
-                        //alert(i);
-                        J.hideMask();
-                        $('.pic_nav .dot').text(i+1);
-                        var per = 25*i;
-                        $('.line').css('left',per+'%');
-                    }
+                selector : '#slidePics',
+                showDots : false,
+                onBeforeSlide : function(){
+                    console.log($(this));
+                    return true;
+                },
+                onAfterSlide : function(i){
+                    //alert(i);
+                    J.hideMask();
+                    $('.pic_nav .dot').text(i+1);
+                    var per = 25*i;
+                    $('.line').css('left',per+'%');
+                }
             });
             $(".souvenir_cont .btn_buy").on("touchstart",function(event){
                 $("#souvenir_form_section").addClass("active");
@@ -639,7 +651,7 @@ App.page('product',function(){
         J.showMask();
         $.ajax({
             url : url,
-			dataType : 'jsonp',
+            dataType : 'jsonp',
             timeout : 20000,
             success : function(data){
                 Product.data =data;
@@ -668,17 +680,17 @@ App.page('product',function(){
 App.page('product_detail',function(){
     this.init = function(){
         Share.init("product",Product);
-		
+
     };
     this.show = function(){
         var i = Product.clickCurrent,item = Product.arr[i];
         J.tmpl("#product_detail_article .detail_wrap",'product_detail_template',item,"replace");
-		setTimeout(function(){
-			$(".btn_buy").on("touchstart",function(){
-				console.log("ddd");
-				partnerBd.findnear = 1;
-			});
-		},500);
+        setTimeout(function(){
+            $(".btn_buy").on("touchstart",function(){
+                console.log("ddd");
+                partnerBd.findnear = 1;
+            });
+        },500);
     }
 });
 
@@ -689,7 +701,7 @@ App.page('news',function(){
         console.log("这里是news");
         $.ajax({
             url : url,
-			dataType : 'jsonp',
+            dataType : 'jsonp',
             timeout : 20000,
             success : function(data){
                 //data = JSON.parse(data);
@@ -738,7 +750,7 @@ App.page('news_detail',function(){
                 }, 2000);
                 setTimeout(function () {
                     //scroll.refresh();
-					J.Scroll($("#news_detail_article"));
+                    J.Scroll($("#news_detail_article"));
                     scroll.scrollTo(0,0,20);
                     if(News.current ==0){
                         J.showToast('到底了！返回第一条','success');
@@ -771,15 +783,15 @@ App.page('history',function(){
             wrapperClass:'history_wrapper',
             mode: 'vertical',
             slideActiveClass:'his_slide_active',
-			onSlideChangeStart:function(swiper){
-				var num = swiper.activeIndex;
-				$(swiper.slides).removeClass("his_slide_now");
-				$(swiper.slides[num]).addClass("his_slide_now");
-				if(num>4){
-					num=4;
-				}
-				hisResetAdd(num,$(".his_it"));
-			}
+            onSlideChangeStart:function(swiper){
+                var num = swiper.activeIndex;
+                $(swiper.slides).removeClass("his_slide_now");
+                $(swiper.slides[num]).addClass("his_slide_now");
+                if(num>4){
+                    num=4;
+                }
+                hisResetAdd(num,$(".his_it"));
+            }
         });
         var moveSiz={};
         //console.log(mySwiper);
@@ -797,16 +809,16 @@ App.page('history',function(){
             }
             item = $(event.target);
             num =$(item).parents(".his_it").index();
-			//console.log($(item).parents(".his_it"));
+            //console.log($(item).parents(".his_it"));
             History.current = num;
-			slides = mySwiper.slides;
-			slen = slides.length;
-			
-			//console.log(mySwiper.slides);
+            slides = mySwiper.slides;
+            slen = slides.length;
+
+            //console.log(mySwiper.slides);
             mySwiper.swipeTo(pageArr[num],0);
-			$(slides[pageArr[num]]).addClass("his_slide_now");
-            
-			hisResetAdd(num,$(".his_it"));
+            $(slides[pageArr[num]]).addClass("his_slide_now");
+
+            hisResetAdd(num,$(".his_it"));
             setTimeout(function(){
                 $("#history_article").hide();
             },500);
@@ -816,16 +828,16 @@ App.page('history',function(){
         $("#history_detail_article .btn_back").on(" touchend",function(event){
             var lis = $(".his_it"),len = lis.length,i,slides,slen;
             $("#history_article").show();
-			slides = mySwiper.slides;
-			slen = slides.length;
-			for(i = 0;i<slen;i++){
-				//console.log($(slides[i]).hasClass("his_slide_now"));
-				if($(slides[i]).hasClass("his_slide_now")){
-					$(slides[i]).removeClass("his_slide_now");
-					//console.log($(slides[i]));
-					break;
-				}
-			}
+            slides = mySwiper.slides;
+            slen = slides.length;
+            for(i = 0;i<slen;i++){
+                //console.log($(slides[i]).hasClass("his_slide_now"));
+                if($(slides[i]).hasClass("his_slide_now")){
+                    $(slides[i]).removeClass("his_slide_now");
+                    //console.log($(slides[i]));
+                    break;
+                }
+            }
             for(i = 0;i<len;i++){
                 if($(lis[i]).hasClass("his_it_active")){
                     $(lis[i]).removeClass("his_it_active");
@@ -840,35 +852,35 @@ App.page('history',function(){
         });
 
     };
-	function hisResetAdd(current,lisArr){    //lisArr--$(".his_it")
-		var len = lisArr.length,i;
-		for(i = 0;i<len;i++){
-			if($(lisArr[i]).hasClass("his_it_active")){
-				$(lisArr[i]).removeClass("his_it_active");
-			}
-			if($(lisArr[i]).hasClass("his_it_down")){
-				$(lisArr[i]).removeClass("his_it_down");
-			}
-			if($(lisArr[i]).hasClass("his_it_up")){
-				$(lisArr[i]).removeClass("his_it_up");
-			}
-		}
-		for(i = 0;i<current;i++){
-			lisArr.eq(i).addClass("his_it_up");
-		}
-		for(i = current+1;i<len;i++){
-			lisArr.eq(i).addClass("his_it_down");
-		}
-		lisArr.eq(current).addClass("his_it_active");
-	}
+    function hisResetAdd(current,lisArr){    //lisArr--$(".his_it")
+        var len = lisArr.length,i;
+        for(i = 0;i<len;i++){
+            if($(lisArr[i]).hasClass("his_it_active")){
+                $(lisArr[i]).removeClass("his_it_active");
+            }
+            if($(lisArr[i]).hasClass("his_it_down")){
+                $(lisArr[i]).removeClass("his_it_down");
+            }
+            if($(lisArr[i]).hasClass("his_it_up")){
+                $(lisArr[i]).removeClass("his_it_up");
+            }
+        }
+        for(i = 0;i<current;i++){
+            lisArr.eq(i).addClass("his_it_up");
+        }
+        for(i = current+1;i<len;i++){
+            lisArr.eq(i).addClass("his_it_down");
+        }
+        lisArr.eq(current).addClass("his_it_active");
+    }
 
 });
 
 App.page('history_detail',function(){
     this.init = function(){
-		//J.showMask();
+        //J.showMask();
         Share.init("history",History);
-		//var url = 'http://davidwine.cn/api/getHistory.php?callback=?';
+        //var url = 'http://davidwine.cn/api/getHistory.php?callback=?';
         console.log("这里是news");
 
     };
