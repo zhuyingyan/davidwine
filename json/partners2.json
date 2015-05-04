@@ -1,0 +1,194 @@
+[
+    {
+        "id":"01",
+        "city":"广州",
+        "number":4,
+        "array":[
+            {
+                "id":"0101",
+                "site":{
+                    "lng":113.409858,
+                    "lat":23.307056
+                },
+                "name":"广州市崔氏酒业山庄有限公司",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0102",
+                "site":{
+                    "lng":113.383418,
+                    "lat":23.365731
+                },
+                "name":"永胜酒庄",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0103",
+                "site":{
+                    "lng":113.37785,
+                    "lat":23.361874
+                },
+                "name":"名士酒庄",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0104",
+                "site":{
+                    "lng":113.358295,
+                    "lat":23.302351
+                },
+                "name":"万诚酒业",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            }
+        ]
+    },
+    {
+        "id":"02",
+        "city":"北京",
+        "number":4,
+        "array":[
+            {
+                "id":"0201",
+                "site":{
+                    "lng":234,
+                    "lat":354
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0202",
+                "site":{
+                    "lng":234,
+                    "lat":354
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0203",
+                "site":{
+                    "lng":234,
+                    "lat":354
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0204",
+                "site":{
+                    "lng":234,
+                    "lat":354
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            }
+        ]
+    },
+    {
+        "id":"03",
+        "city":"深圳",
+        "number":4,
+        "array":[
+            {
+                "id":"0301",
+                "site":{
+                    "lng":234,
+                    "lat":354
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0302",
+                "site":{
+                    "lng":234,
+                    "lat":3554
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0303",
+                "site":{
+                    "lng":234,
+                    "lat":3554
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0304",
+                "site":{
+                    "lng":234,
+                    "lat":3554
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            }
+        ]
+    },
+    {
+        "id":"04",
+        "city":"东莞",
+        "number":4,
+        "array":[
+            {
+                "id":"0401",
+                "site":{
+                    "lng":113.75711,
+                    "lat":23.020408
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0402",
+                "site":{
+                    "lng":113.76117,
+                    "lat":23.046266
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0403",
+                "site":{
+                    "lng":113.763147,
+                    "lat":23.050024
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            },{
+                "id":"0404",
+                "site":{
+                    "lng":113.758439,
+                    "lat":23.043273
+                },
+                "name":"kejef dkfjg",
+                "description":"dgdd rereg gfsf gdfs.",
+                "telephone":"344323",
+                "pics":["imgs/p1.jpg","imgs/p2.jpg","imgs/p3.jpg"]
+            }
+        ]
+    }
+]

@@ -1,0 +1,26 @@
+<section id="news_section"  data-transition="popup">
+    <nav class="news_nav">
+        <a href="#" class="btn_back" data-icon="previous" data-target="back"></a>
+    </nav>
+    <article class="active" id="news_article" data-scroll="true">
+        <div class="news_wrap">
+            <h1 class="tit_news">NEWS</h1>
+            <ul class="news_lis" id="newsLis">
+                
+            </ul>
+        </div>
+    </article>
+    <script type="text/html" id="news_template">
+        {{each data as value i}}
+        <li class="news_it">
+            <a class="news_ln" href="#news_detail_section"  data-target="section" >
+                <div class="news_lis_wr"><img class="news_pic" src="{{value.pics[0]}}" alt="{{value.title}}"/></div>
+                <hgroup class="news_group ">
+                    <h1 class="news_main">{{value.title}}</h1>
+                    <h2 class="news_if">{{value.time}}</h2>
+                </hgroup>
+            </a>
+        </li>
+        {{/each}}
+    </script>
+</section>

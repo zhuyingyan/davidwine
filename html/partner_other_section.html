@@ -1,0 +1,40 @@
+<section id="partner_other_section"  data-transition="popup">
+    <nav class="partner_nav">
+        <a href="#" class="btn_back" data-icon="previous" data-target="back"></a>
+        
+        
+    </nav>
+    <article class="active" id="partnerot_article" data-scroll="true"  >
+        <div class="scrollWrapper">
+            <div class="partner_map">
+                <div id="allothermap"></div>
+            </div>
+            <div class="partner_other_lis" id="partnerotLis">
+                <!--<div class="partner-item">
+                    <a href="#partner_detail_section"  data-target="section">
+                        <h2 class="partner-tit"><span class="rank">1.</span><span class="partner-name">Davidwine ClubDavidwine ClubDavidwine ClubDavidwine Club</span></h2>
+                        <p class="tele">13928203139</p>
+                        <p class="addr">佛山市季华路3号九鼎国际一区5座705房</p>
+                        <span class="distance">324m</span>
+                    </a>
+                </div>-->
+                
+            </div>
+        </div>
+    </article>
+	
+    <!--popup temple-->
+    <script type="text/html" id="partnerot_template">
+		{{each partners as value i}}
+		<div class="partner_item">
+			<a href="#partner_detail_section"  data-target="section">
+				<h2 class="partner_tit"><span class="rank">{{i+1}}.</span><span class="value.name">{{value.name}}</span></h2>
+				<p class="tele">{{value.phone}}</p>
+				<p class="addr">{{value.desc}}</p>
+				<span class="distance"></span>
+			</a>
+		</div>
+		{{/each}}
+    </script>
+	
+</section>

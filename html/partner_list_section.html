@@ -1,0 +1,35 @@
+<section id="partner_list_section"  data-transition="popup">
+    <nav class="partner_nav">
+        <a href="#" class="btn_back" data-icon="previous" data-target="back"></a>
+    </nav>
+    <article class="active" id="partner_article" data-scroll="true"  >
+        <div class="scrollWrapper">
+            
+            <div class="partner_list_lis" id="partnerListLis">
+
+            </div>
+			
+        </div>
+    </article>
+
+    <!--popup temple-->
+    <script type="text/html" id="partner_list_template">
+		<h1 class="tit_partner_list">{{city}}({{partners.length}})</h1>
+		{{each partners as value i}}
+		<div class="partner_list_item">
+			<a href="#partner_detail_section"  data-target="section">
+				<h2 class="partner_tit"><span class="rank">{{i+1}}.</span><span class="value.name">{{value.name}}</span></h2>
+				<p class="tele">{{value.phone}}</p>
+				<p class="addr">{{value.desc}}</p>
+                {{if  value.distance>=1000}}
+                <span class="distance">{{(value.distance/1000).toFixed(1)}}km</span>
+                {{/if}}
+                {{if  value.distance>=0 && value.distance<1000}}
+                <span class="distance">{{value.distance}}m</span>
+                {{/if}}
+			</a>
+		</div>
+		{{/each}}
+    </script>
+	
+</section>

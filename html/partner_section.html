@@ -1,0 +1,107 @@
+<section id="partner_section"  data-transition="popup">
+    <nav class="partner_nav">
+        <a href="#" class="btn_back" data-icon="previous" data-target="back"></a>
+        <a href="#" class="btn_search"  id="btn_search"></a>
+        <a href="#" class="btn_city" id="mySite" ></a>
+        
+    </nav>
+    <article class="active" id="partner_article" data-scroll="true"  >
+        <div class="scrollWrapper">
+            <div class="partner_map">
+                <div id="allmap"></div>
+            </div>
+            <div class="partner_lis" id="partnerLis">
+
+            </div>
+			<a href="#" class="btn_more" style="display:none;">点击下10个</a>
+        </div>
+    </article>
+	<article class="partner_search" id="partner_search_article" style="display:none;">
+        <div id="tag_close_popup"><span class="ico_close"></span></div>
+        <div class="search_pt">
+            <div class="search_form">
+                <input type="search" name="search_input" class="search_input"  placeholder="请输入城市名/商户名"/>
+                <a href="#" class="btn_search_input">搜索</a>
+            </div>
+            <div class="search_result" data-scroll="true">
+                <div class="search_wrap">
+                    <ul class="search_lis">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </article>
+    <!--popup temple-->
+    <script type="text/html" id="partner_template">
+		{{if isNoPartner}}
+		<div class="partner_tips">
+			<p class="partner_tip_if">离你最近的城市有{{partners.length}}家商户</p>
+		</div>
+		{{/if}}
+		{{if clickable}}
+			{{each partners as value i}}
+			<div class="partner_item">
+				<a href="#partner_detail_section"  data-target="section">
+					<h2 class="partner_tit"><span class="rank">{{value.item+1}}.</span><span class="value.name">{{value.name}}</span></h2>
+					<p class="tele">{{value.phone}}</p>
+					<p class="addr">{{value.desc}}</p>
+					{{if  value.distance>=1000}}
+					<span class="distance">{{(value.distance/1000).toFixed(1)}}km</span>
+					{{/if}}
+					{{if  value.distance>=0 && value.distance<1000}}
+					<span class="distance">{{value.distance}}m</span>
+					{{/if}}
+
+				</a>
+			</div>
+			{{/each}}
+		{{else}}
+			{{each partners as value i}}
+			<div class="partner_item">
+				<a href="#partner_detail_section"  data-target="section">
+					<h2 class="partner_tit"><span class="rank">{{value.item+1}}.</span><span class="value.name">{{value.name}}</span></h2>
+					<p class="tele">{{value.phone}}</p>
+					<p class="addr">{{value.desc}}</p>
+
+				</a>
+			</div>
+			{{/each}}
+		{{/if}}
+    </script>
+	
+	<script type="text/html" id="search_template">
+		{{each searre as value i}}
+		{{if value.isCity}}
+		<li class="search_item">
+			{{if value.isGPS}}
+			<a href="#partner_list_section" class="search_ln search_GPS" data-target="section">
+			{{else}}
+			<a href="#partner_list_section" class="search_ln" data-target="section">
+			{{/if}}
+				<div class="item_wr">
+					<span class="search_name">{{value.city}}</span>
+					<span class="search_num">{{value.partnersNum}}</span>
+				</div>
+			</a>
+		</li>
+		{{else}}
+		<li class="search_item">
+			<a href="#partner_detail_section" class="search_ln search_{{value.type}}" data-target="section">
+				<div class="item_wr">
+					<span class="search_name">{{value.name}}</span>
+
+					{{if  value.distance>=1000}}
+					<span class="distance">{{(value.distance/1000).toFixed(1)}}km</span>
+					{{/if}}
+					{{if  value.distance>=0 && value.distance<1000}}
+					<span class="distance">{{value.distance}}m</span>
+					{{/if}}
+				</div>
+			</a>
+		</li>
+		{{/if}}
+        {{/each}}                
+	</script>
+	
+</section>

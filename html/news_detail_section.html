@@ -1,0 +1,53 @@
+<section id="news_detail_section"  data-transition="popup">
+    <nav class="news_nav">
+        <a href="#" class="btn_back" data-icon="previous" data-target="back"></a>
+        <a class="btn_share"  id="btn_share" href="#" ></a>
+    </nav>
+    <article class="active" id="news_detail_article">
+        <div class="news_detail_wrap">
+
+        </div>
+    </article>
+    <script type="text/html" id="news_detail_template">
+        <div class="news_item">
+            <div class="news_head">
+                <h1 class="news_tit">{{title}}</h1>
+                <p class="news_time">{{time}}</p>
+                <img src="{{pics[0]}}" alt="" class="news_ban"/>
+            </div>
+            <div class="news_content">
+                {{each picWordArr as value i}}
+                    {{if value.word}}
+                    <p class="news_content_word">{{#value.word}}</p>
+                    {{/if}}
+                    {{if value.pic}}
+                    <div class="news_pic_wr"><img src="{{value.pic}}" alt="" class="news_pic"/></div>
+                    {{/if}}
+                {{/each}}
+            </div>
+        </div>
+        <div class="pull_scroll"><span class="pull_scroll_icon arrow_down_2"></span><span class="pull_scroll_label">继续上拉到下一个新闻</span></div>
+    </script>
+    <script type="text/html" id="news_share_template">
+        <section id="news_share_section" class="active">
+            <nav class="share_nav close_share">
+                <a href="#" class="btn_close"></a>
+            </nav>
+            <article class="share_active">
+                <div class="share_wrap">
+                    <ul class="lis_app">
+                        {{each list as value i}}
+                        {{if value.isBound}}
+                        <li class="app app_no"><a href="#" class="app_ln{{i+1}}">{{value.name}}</a></li>
+                        {{else}}
+                        <li class="app"><a href="#" class="app_ln{{i+1}}">{{value.name}}</a></li>
+                        {{/if}}
+                        {{/each}}
+
+                    </ul>
+                </div>
+                <div class="close_bg close_share"></div>
+            </article>
+        </section>
+    </script>
+</section>
