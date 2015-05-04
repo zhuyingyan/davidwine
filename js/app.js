@@ -34,6 +34,9 @@ var Product = {
 };
 
 
+
+
+
 // 用于 news 数据
 var News ={
     data:[],
@@ -55,16 +58,43 @@ var History ={
 };
 
 var Share = {
+    data:[
+        {
+            name:"WECHAT",
+            isBound:false
+        },
+        {
+            name:"MOMENT",
+            isBound:true
+        },
+        {
+            name:"WEIBO",
+            isBound:false
+        },
+        {
+            name:"INSTAGRAM",
+            isBound:false
+        },
+        {
+            name:"FACEBOOK",
+            isBound:true
+        },
+        {
+            name:"TWITTER",
+            isBound:true
+        }
+    ],
     init:function(sectionId,sectionObj){
-
+        var theData = {};
+        theData.list = this.data;
         $("#"+sectionId+"_detail_section .btn_share").on("touchstart",function(){
 
             if(!sectionObj.shareInit){
                 console.log(sectionObj.shareInit);
-                J.tmpl("#"+sectionId+"_detail_section",sectionId+'_share_template',{},"add");
+                J.tmpl("#"+sectionId+"_detail_section",sectionId+'_share_template',theData,"add");
                 sectionObj.shareInit = 1;
                 setTimeout(function(){
-                    $("#"+sectionId+"_detail_section .btn_close").on("touchstart",function(){
+                    $("#"+sectionId+"_detail_section .close_share").on("touchstart",function(){
                         var $lisapp = $("#"+sectionId+"_detail_section .lis_app");
                         $lisapp.addClass("lis_app_close");
                         setTimeout(function(){
@@ -82,15 +112,16 @@ var Share = {
         });
     },
     init2:function(sectionId,sectionObj){
-
+        var theData = {};
+        theData.list = this.data;
         $("#"+sectionId+"_section .btn_share,#"+sectionId+"_section .btn_share_big").on("touchstart",function(){
 
             if(!sectionObj.shareInit){
                 console.log(sectionObj.shareInit);
-                J.tmpl("#"+sectionId+"_section",sectionId+'_share_template',{},"add");
+                J.tmpl("#"+sectionId+"_section",sectionId+'_share_template',theData,"add");
                 sectionObj.shareInit = 1;
                 setTimeout(function(){
-                    $("#"+sectionId+"_section .btn_close").on("touchstart",function(){
+                    $("#"+sectionId+"_section .close_share").on("touchstart",function(){
                         var $lisapp = $("#"+sectionId+"_section .lis_app");
                         $lisapp.addClass("lis_app_close");
                         setTimeout(function(){
@@ -164,7 +195,17 @@ App.page('index',function(){
         //$('#btn_show_welcome').on('tap', J.Welcome.show);
         var $btnMusic = $('.volume_medium'),audio,n=0;
         audio = document.createElement("audio");
-        audio.src = "/music/bg.mp3";
+        audio.src = "music/bg.mp3";
+		var mySwiper = new Swiper('.swiper_container',{
+			mode:'vertical',
+			centeredSlides: true,
+			slidesPerView: 5,
+			watchActiveIndex: true,
+			pagination:'.swiper_wrapper',
+			paginationElementClass: 'slide_mask',
+			paginationClickable: true
+		});
+	
         if (audio != null && audio.canPlayType && audio.canPlayType("audio/mpeg"))
         {
             audio.play();
@@ -190,7 +231,17 @@ App.page('index',function(){
             }
             n++;
         });
-		
+		$(document).on("visibilitychange",function(){
+            if(document.hidden){
+                audio.pause();
+            }
+            else{
+				if(n%2 == 0){               
+					audio.play();
+				}
+            }
+            //console.log(document.hidden);
+        });
     }
 })
 
@@ -200,7 +251,9 @@ App.page('partner',function(){
         partnerBd._init();     
 		var count = 1;	
         $('#mySite').click(function(){
-            J.showToast('正在获取我的位置');
+            //J.showToast('正在获取我的位置');
+            J.showMask("Positioning..");
+            partnerBd.clickSite = true;
 			count = 1;
             partnerBd.getSite(partnerBd.mainMap);
         });
@@ -208,12 +261,11 @@ App.page('partner',function(){
 			var _self = partnerBd,cityData={},cityNum = _self.currentCityNum;
 			cityData.searre= _self.cityArr;
 			
-			//console.log(cityData);
 			$('#partner_search_article').show();
 			$(".search_pt").css("opactiy","0");
             J.anim("#partner_search_article","opacityIn",function(){
 				$(".search_pt").css("opactiy","1");
-                J.anim(".search_pt","slideUpIn");
+                //J.anim(".search_pt","slideUpIn");
 				J.tmpl(".search_lis",'search_template',cityData,"replace");
 				setTimeout(function(){					
 					if(cityData.isGPS){
@@ -238,6 +290,7 @@ App.page('partner',function(){
             num =parseInt($($(item).find('.rank')).text()) - 1;
             partnerBd._current = num;          
         });
+
 		$('.search_lis').on("touchstart",function(event){
 			var num,item,_self= partnerBd;
             item = $(event.target).parents('.search_item');
@@ -279,10 +332,12 @@ App.page('partner',function(){
 			},100);
 		});
 		$('.btn_more').on('touchstart',function(){			
-			var _self = partnerBd,result10 = {},resultlast = _self.lastPartner,resultlastPart = resultlast.partners,sectionID = "partner",i,partTemp,point,iconObj = _self.defaultIconObj,map=_self.mainMap,showNum = _self.showPartnerNum,mark,count ;
+			var _self = partnerBd,result10 = {},resultlast = _self.lastPartner,resultlastPart = resultlast.partners,
+                sectionID = "partner",i,partTemp,point,iconObj = _self.defaultIconObj,map=_self.mainMap,showNum = _self.showPartnerNum,mark,count ;
 			_self.lastCount = _self.lastCount + 1;
 			count = _self.lastCount;
 			result10.partners = [];
+			result10.clickable = _self.clickSite;
 			if(resultlastPart.length<=showNum){
 				result10.partners = resultlastPart;
 				$('.'+_self.showLastClass).hide();
@@ -307,7 +362,7 @@ App.page('partner',function(){
 		var _self = partnerBd;
 		_self.findnear = 0;
 		if(_self._resultLocal.length&&_self._resultLocal[0].cityNum!=_self.currentCityNum){
-			console.log("dd");
+			//console.log("dd");
 			_self._resultLocal = findCityPartners(_self.currentCityNum,_self.partnerArr);
 		}
 	}
@@ -382,7 +437,7 @@ App.page('partner_detail',function(){
 		var current =current||partnerBd._current;		
 		var local = local||partnerBd._resultLocal;
 		var map = map|| new BMap.Map("partmap");
-		var icon,_self = partnerBd,point,origin = partnerBd.mySitePoint,isbus = isbus||0,mark;
+		var icon,_self = partnerBd,point,origin = partnerBd.mySitePoint,isbus = isbus||0,mark,routePoiFun;
 		point = new BMap.Point(local[current].lng,local[current].lat);
 		if(origin.lng&&origin.lat){
 			map.centerAndZoom(origin, 12);
@@ -393,24 +448,59 @@ App.page('partner_detail',function(){
 				else if(local[current].distance>1000){
 					isbus = 1;
 				}
-			}           		
-            _self.routePolicy(map,origin,point,isbus);
-			mark = addMarker(_self.defaultIconObj,point,map);
+			}
+            routePoiFun = _self.routePolicy(map,origin,point,isbus);
+            routePoiFun.setMarkersSetCallback(function(pois){
+                var i =0,len = pois.length,that = _self,icon1,icon2,icon1Obj = that.mySiteIconObj,icon2Obj ;
+                icon1 =new BMap.Icon(icon1Obj.url, new BMap.Size(icon1Obj.w*2,icon1Obj.h*2));
+                icon1.imageSize=new BMap.Size(icon1Obj.w,icon1Obj.h);
+                pois[0].marker.setIcon(icon1);
+                pois[1].marker.setOffset(new BMap.Size(0,34));
+
+                if(current<11){
+                    icon2Obj = that.levelBIconObj[current];
+                    icon2 =  new BMap.Icon(icon2Obj.url, new BMap.Size(icon2Obj.w*2,icon2Obj.h*2));
+                    icon2.imageSize=new BMap.Size(icon2Obj.w,icon2Obj.h);
+                    pois[1].marker.setIcon(icon2);
+                    //mark = addMarker(_self.levelBIconObj[current],point,map);
+                }else{
+                    icon2Obj = that.defaultBIconObj;
+                    icon2 =  new BMap.Icon(icon2Obj.url, new BMap.Size(icon2Obj.w*2,icon2Obj.h*2));
+                    icon2.imageSize=new BMap.Size(icon2Obj.w,icon2Obj.h);
+                    pois[1].marker.setIcon(icon2);
+                    //pois[1].marker.setIcon(new BMap.Icon(that.defaultBIconObj.url, new BMap.Size(that.defaultBIconObj.w,that.defaultBIconObj.h)));
+                    //mark = addMarker(_self.defaultBIconObj,point,map);
+                }
+                //mark.setOffset(new BMap.Size(0,34));
+            });
+
+
 			_self.showInfoWinSearch(map,local[current]);
 		}
 		else{
 			map.centerAndZoom(point, 16);
-			mark = addMarker(_self.defaultIconObj,point,map);
+			if(current<11){
+				mark = addMarker(_self.levelBIconObj[current],point,map);
+			}else{
+				mark = addMarker(_self.defaultBIconObj,point,map);
+			}
+			mark.setOffset(new BMap.Size(0,34));
 			_self.showInfoWinSearch(map,local[current]);
 			
 		}
-		$('.tit_partner').text(local[current].name);
+        console.log(local[current]);
+        J.tmpl(".detail_content" ,"partner_content_template" ,local[current],"replace");
+		/*$('.tit_partner').text(local[current].name);
         $('.de_par_time').text(local[current].duration);
         $('.detail_content .mes2 span').text(local[current].phone);
         $('.btn_tele').attr("href","tel:"+local[current].phone);
         $('.detail_content .mes1').text(local[current].address);
-        $('.detail_content .mes3').text(local[current].desc);
+        $('.detail_content .mes3').text(local[current].desc);*/
+        setTimeout(function(){
+            J.Scroll("#partner_detail_article");
+        },300);
 	}
+
 
 });
 
@@ -418,7 +508,8 @@ App.page('partner_detail',function(){
 //http://120.24.85.210/api/getSouvenir.php?callback=?
 App.page('souvenir',function(){
     this.init = function(){
-        var url = 'http://120.24.85.210/api/getSouvenir.php?callback=?',newsTem;
+        var url = 'http://davidwine.cn/api/getSouvenir.php?callback=?';
+        //var url = 'api/getSouvenir.php';
         console.log("这里是Souvenir");
         J.showMask();
         $.ajax({
@@ -426,6 +517,7 @@ App.page('souvenir',function(){
             timeout : 20000,
 			dataType : 'jsonp',
             success : function(data){
+                //data = JSON.parse(data);
                 Souvenir.data =data;
                 Souvenir.maxLen = Souvenir.data.data.length;
                 J.hideMask();
@@ -448,6 +540,63 @@ App.page('souvenir',function(){
 });
 
 App.page('souvenir_detail',function(){
+    this.init = function(){
+        Share.init("souvenir",Souvenir);
+        var inputName = ["name","date","telephone","email","addr","number"],i = 0,len = inputName.length,$inputArr = $("#souvenir_form_pt input"),temp;
+        for(i = 0;i<len;i++){
+            temp =localStorage.getItem(inputName[i]);
+            console.log(temp);
+            if(temp){
+                $($inputArr[i]).val(temp);
+            }
+        }
+
+        $("#souvenir_form_pt .btn_submit").on("touchstart",function(event){
+            var inputLis = [],array=["姓名：","出生日期：","联系电话：","E-mail:","地址：","数量："], i,mess,reg=/[\,\?\'(\<*\>)]/,
+                subject = "订购 "+$("#souvenir_detail_section .souvenir_tit").text()+" 信息";
+
+            for(i = 0;i<array.length;i++){
+                inputLis[i]=$("#"+inputName[i]).val();
+                array[i]+=inputLis[i];
+            }
+            if(inputLis[0]&&inputLis[1]&&inputLis[2]&&inputLis[3]&&inputLis[4]){
+                for(i = 0;i<array.length;i++){
+                    if(reg.test(inputLis[i])){
+                        J.showToast(array[i]+"输入不能包括特殊符号！");
+                        event.preventDefault();
+                        return false;
+                    }
+                }
+                mess = array.join("%0d%0a");
+                $(this)[0].href="mailto:administracion.info@davidwine.es"+"?subject="+subject+"&Body="+mess;
+				J.showToast("发送中...");
+				setTimeout(function(){
+					//$(this)[0].href="http://www.baidu.com";
+					$("#souvenir_form_section").removeClass("active");
+				},500);
+				
+            }else{
+                for(i = 0;i<array.length;i++){
+                    if(!inputLis[i]){
+                        J.showToast(array[i]+"没有填写！");
+                        $("#"+inputName[i]).focus();
+                    }
+                }
+                event.preventDefault();
+                return false;
+            }
+
+        });
+        $("#souvenir_form_pt").on("blur","input",function(event){
+            localStorage.setItem(event.target.id,$(event.target).val());
+        }).on("focus","input",function(event){
+            $(event.target).val("");
+        });
+        $(".souvenir_form .btn_close").on("touchstart",function(event){
+            $("#souvenir_form_section").removeClass("active");
+        });
+
+    };
     this.show = function(){
         var slider;
         console.log("这里是Souvenir_detail");
@@ -455,12 +604,11 @@ App.page('souvenir_detail',function(){
 
         J.tmpl(".souvenir_item_wrap",'souvenir_detail_template',Souvenir.data.data[Souvenir.current],"replace");
         setTimeout(function(){
-
-
             slider = new J.Slider({
                     selector : '#slidePics',
                     showDots : false,
                     onBeforeSlide : function(){
+						console.log($(this));
                         return true;
                     },
                     onAfterSlide : function(i){
@@ -471,18 +619,23 @@ App.page('souvenir_detail',function(){
                         $('.line').css('left',per+'%');
                     }
             });
+            $(".souvenir_cont .btn_buy").on("touchstart",function(event){
+                $("#souvenir_form_section").addClass("active");
+            });
+
+
             J.Scroll($("#souvenir_detail_article"));
         },400);
 
 
-        }
+    }
 
 });
 
 App.page('product',function(){
     this.init = function(){
         console.log("这里是product");
-        var url = 'http://120.24.85.210/api/getProducts.php?callback=?';
+        var url = 'http://davidwine.cn/api/getProducts.php?callback=?';
         J.showMask();
         $.ajax({
             url : url,
@@ -531,13 +684,15 @@ App.page('product_detail',function(){
 
 App.page('news',function(){
     this.init = function(){
-        var url = 'http://120.24.85.210/api/getNews.php?callback=?';
+        var url = 'http://davidwine.cn/api/getNews.php?callback=?';
+        //var url = 'api/getNews.php';
         console.log("这里是news");
         $.ajax({
             url : url,
 			dataType : 'jsonp',
             timeout : 20000,
             success : function(data){
+                //data = JSON.parse(data);
                 News.data =data;
                 News.maxLen = News.data.data.length;
                 picWordArr(News.data.data);
@@ -610,70 +765,113 @@ App.page('news_detail',function(){
 });
 App.page('history',function(){
     this.init = function(){
-		J.showMask();
         Share.init2("history",History);
-		var url = 'http://120.24.85.210/api/getHistory.php?callback=?';
-        console.log("这里是news");
-        $.ajax({
-            url : url,
-			dataType : 'jsonp',
-            timeout : 20000,
-            success : function(data){
-                J.tmpl("#history_article .his_slide5_wr",'history_template',data,"replace");
-                setTimeout(function(){
-                    var mySwiper = new Swiper('.history_container',{
-                        slideClass:'his_slide',
-                        wrapperClass:'history_wrapper',
-                        mode: 'vertical',
-                        slideActiveClass:'his_slide_active'
-                    });
-                },500);
-                setTimeout(function(){
-                    var mySwiper2 = new Swiper('.pic_slider1',{
-                        slidesPerView: 'auto',
-                        slideClass:'pic_slide',
-                        slideActiveClass:'pic_slide_active',
-                        wrapperClass:'pic_slideshow_wr',
-                        loop: true,
-                        autoplay: 4500,
-                        autoplayDisableOnInteraction: false
-                    });
+        var mySwiper = new Swiper('.history_detail_container',{
+            slideClass:'his_slide',
+            wrapperClass:'history_wrapper',
+            mode: 'vertical',
+            slideActiveClass:'his_slide_active',
+			onSlideChangeStart:function(swiper){
+				var num = swiper.activeIndex;
+				$(swiper.slides).removeClass("his_slide_now");
+				$(swiper.slides[num]).addClass("his_slide_now");
+				if(num>4){
+					num=4;
+				}
+				hisResetAdd(num,$(".his_it"));
+			}
+        });
+        var moveSiz={};
+        //console.log(mySwiper);
 
-                    var mySwiper3 = new Swiper('.pic_slider2',{
-                        slidesPerView: 'auto',
-                        slideClass:'pic_slide',
-                        slideActiveClass:'pic_slide_active',
-                        wrapperClass:'pic_slideshow_wr',
-                        loop: true,
-                        autoplay: 3500,
-                        autoplayDisableOnInteraction: false
-                    });
-                    var mySwiper4 = new Swiper('.pic_slider3',{
-                        slidesPerView: 'auto',
-                        slideClass:'pic_slide',
-                        slideActiveClass:'pic_slide_active',
-                        wrapperClass:'pic_slideshow_wr',
-                        loop: true,
-                        autoplay: 4000,
-                        autoplayDisableOnInteraction: false
-                    });
-                    var mySwiper5 = new Swiper('.pic_slider4',{
-                        slidesPerView: 'auto',
-                        slideClass:'pic_slide',
-                        slideActiveClass:'pic_slide_active',
-                        wrapperClass:'pic_slideshow_wr',
-                        loop: true,
-                        autoplay: 3000,
-                        autoplayDisableOnInteraction: false
-                    });
-                    J.hideMask();
-                },1000);
+        $('#historyLis').on("touchstart",function(event){
+            var touch = event.touches[0];
+            moveSiz.x = touch.pageX;
+            moveSiz.y = touch.pageY;
+            console.log(touch.pageX+" "+touch.pageY);
+        }).on(" touchend",".his_it",function(event){
+            var num,item,pageArr = [0,1,2,3,4], i,lis=$(".his_it"),len = lis.length,slides,slen,touch = event.changedTouches[0];
+            if(Math.abs(moveSiz.x-touch.pageX)>5||Math.abs(moveSiz.y-touch.pageY)>5){
+                event.preventDefault();
+                return false;
             }
-		});
+            item = $(event.target);
+            num =$(item).parents(".his_it").index();
+			//console.log($(item).parents(".his_it"));
+            History.current = num;
+			slides = mySwiper.slides;
+			slen = slides.length;
+			
+			//console.log(mySwiper.slides);
+            mySwiper.swipeTo(pageArr[num],0);
+			$(slides[pageArr[num]]).addClass("his_slide_now");
+            
+			hisResetAdd(num,$(".his_it"));
+            setTimeout(function(){
+                $("#history_article").hide();
+            },500);
+            //$("#history_article").hide();
+        });
 
+        $("#history_detail_article .btn_back").on(" touchend",function(event){
+            var lis = $(".his_it"),len = lis.length,i,slides,slen;
+            $("#history_article").show();
+			slides = mySwiper.slides;
+			slen = slides.length;
+			for(i = 0;i<slen;i++){
+				//console.log($(slides[i]).hasClass("his_slide_now"));
+				if($(slides[i]).hasClass("his_slide_now")){
+					$(slides[i]).removeClass("his_slide_now");
+					//console.log($(slides[i]));
+					break;
+				}
+			}
+            for(i = 0;i<len;i++){
+                if($(lis[i]).hasClass("his_it_active")){
+                    $(lis[i]).removeClass("his_it_active");
+                }
+                if($(lis[i]).hasClass("his_it_down")){
+                    $(lis[i]).removeClass("his_it_down");
+                }
+                if($(lis[i]).hasClass("his_it_up")){
+                    $(lis[i]).removeClass("his_it_up");
+                }
+            }
+        });
 
     };
+	function hisResetAdd(current,lisArr){    //lisArr--$(".his_it")
+		var len = lisArr.length,i;
+		for(i = 0;i<len;i++){
+			if($(lisArr[i]).hasClass("his_it_active")){
+				$(lisArr[i]).removeClass("his_it_active");
+			}
+			if($(lisArr[i]).hasClass("his_it_down")){
+				$(lisArr[i]).removeClass("his_it_down");
+			}
+			if($(lisArr[i]).hasClass("his_it_up")){
+				$(lisArr[i]).removeClass("his_it_up");
+			}
+		}
+		for(i = 0;i<current;i++){
+			lisArr.eq(i).addClass("his_it_up");
+		}
+		for(i = current+1;i<len;i++){
+			lisArr.eq(i).addClass("his_it_down");
+		}
+		lisArr.eq(current).addClass("his_it_active");
+	}
 
+});
+
+App.page('history_detail',function(){
+    this.init = function(){
+		//J.showMask();
+        Share.init("history",History);
+		//var url = 'http://davidwine.cn/api/getHistory.php?callback=?';
+        console.log("这里是news");
+
+    };
 });
 
 

@@ -11,22 +11,7 @@
 			
         </div>
     </article>
-	<!--<article class="partner-search" id="partner_search_article" style="display:none;">
-        <div id="tag_close_popup"></div>
-        <div class="search_pt">
-            <div class="search_form">
-                <input type="search" name="search_input" class="search_input"  placeholder="请输入城市名/商户名"/>
-                <a href="#" class="btn_search_input">搜索</a>
-            </div>
-            <div class="search_result" data-scroll="true">
-                <div class="search_wrap">
-                    <ul class="search_lis">
 
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </article>-->
     <!--popup temple-->
     <script type="text/html" id="partner_list_template">
 		<h1 class="tit_partner_list">{{city}}({{partners.length}})</h1>
@@ -36,9 +21,12 @@
 				<h2 class="partner_tit"><span class="rank">{{i+1}}.</span><span class="value.name">{{value.name}}</span></h2>
 				<p class="tele">{{value.phone}}</p>
 				<p class="addr">{{value.desc}}</p>
-				{{if value.distance>=0}}
-				<span class="distance">{{value.distance}}m</span>
-				{{/if}}
+                {{if  value.distance>=1000}}
+                <span class="distance">{{(value.distance/1000).toFixed(1)}}km</span>
+                {{/if}}
+                {{if  value.distance>=0 && value.distance<1000}}
+                <span class="distance">{{value.distance}}m</span>
+                {{/if}}
 			</a>
 		</div>
 		{{/each}}

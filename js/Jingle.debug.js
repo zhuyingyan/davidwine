@@ -1836,14 +1836,22 @@ J.Cache = (function($){
          * 初始化容器大小
          */
         var _init = function() {
+			var slidesHeightArr=[],slideMinHeight;
             container = wrapper.children().first();
             slides = container.children();
             slideNum = slides.length;
             slideWidth = wrapper.offset().width;
-            container.css('width',slideNum * slideWidth);
+            container.css('width',slideNum * slideWidth);			
             slides.css({
-                'width':slideWidth,
+                'width':slideWidth,             
                 'float':'left'
+            }).show();
+			slides.each(function(item){				
+				slidesHeightArr.push($(this).height());
+			});
+			slideMinHeight=Math.min.apply(null, slidesHeightArr);
+			slides.css({                
+                'height':slideMinHeight                
             }).show();
             if(showDots == undefined)showDots = true;
             showDots && _initDots();

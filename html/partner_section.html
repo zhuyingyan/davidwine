@@ -39,18 +39,35 @@
 			<p class="partner_tip_if">离你最近的城市有{{partners.length}}家商户</p>
 		</div>
 		{{/if}}
-		{{each partners as value i}}
-		<div class="partner_item">
-			<a href="#partner_detail_section"  data-target="section">
-				<h2 class="partner_tit"><span class="rank">{{value.item+1}}.</span><span class="value.name">{{value.name}}</span></h2>
-				<p class="tele">{{value.phone}}</p>
-				<p class="addr">{{value.desc}}</p>
-				{{if value.distance>=0}}
-				<span class="distance">{{value.distance}}m</span>
-				{{/if}}
-			</a>
-		</div>
-		{{/each}}
+		{{if clickable}}
+			{{each partners as value i}}
+			<div class="partner_item">
+				<a href="#partner_detail_section"  data-target="section">
+					<h2 class="partner_tit"><span class="rank">{{value.item+1}}.</span><span class="value.name">{{value.name}}</span></h2>
+					<p class="tele">{{value.phone}}</p>
+					<p class="addr">{{value.desc}}</p>
+					{{if  value.distance>=1000}}
+					<span class="distance">{{(value.distance/1000).toFixed(1)}}km</span>
+					{{/if}}
+					{{if  value.distance>=0 && value.distance<1000}}
+					<span class="distance">{{value.distance}}m</span>
+					{{/if}}
+
+				</a>
+			</div>
+			{{/each}}
+		{{else}}
+			{{each partners as value i}}
+			<div class="partner_item">
+				<a href="#partner_detail_section"  data-target="section">
+					<h2 class="partner_tit"><span class="rank">{{value.item+1}}.</span><span class="value.name">{{value.name}}</span></h2>
+					<p class="tele">{{value.phone}}</p>
+					<p class="addr">{{value.desc}}</p>
+
+				</a>
+			</div>
+			{{/each}}
+		{{/if}}
     </script>
 	
 	<script type="text/html" id="search_template">
@@ -73,9 +90,12 @@
 			<a href="#partner_detail_section" class="search_ln search_{{value.type}}" data-target="section">
 				<div class="item_wr">
 					<span class="search_name">{{value.name}}</span>
-					
-					{{if value.distance>=0}}
-					<span class="search_num">{{value.distance}}m</span>
+
+					{{if  value.distance>=1000}}
+					<span class="distance">{{(value.distance/1000).toFixed(1)}}km</span>
+					{{/if}}
+					{{if  value.distance>=0 && value.distance<1000}}
+					<span class="distance">{{value.distance}}m</span>
 					{{/if}}
 				</div>
 			</a>

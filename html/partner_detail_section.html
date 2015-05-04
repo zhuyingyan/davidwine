@@ -10,7 +10,7 @@
                     <div id="partmap"></div>
                 </div>
                 <div class="detail_content">
-                    <h1 class="tit_partner">Davidwine Club</h1>
+                    <!--<h1 class="tit_partner">Davidwine Club</h1>
                     <p class="de_par_time">09:00_24:00</p>
                     <p class="de_par_mes mes1">广州市荔湾区华贵路1号贵贤上品A5 -1704</p>
                     <p class="de_par_mes mes2"><span>18068542682/456774544456774544456774544 </span><a class="btn_tele" href="#"></a></p>
@@ -20,7 +20,7 @@
                         <img class="de_par_img" src="pics/p1.jpg" alt=""/>
                         <img class="de_par_img" src="pics/p2.jpg" alt=""/>
                         <img class="de_par_img" src="pics/p3.jpg" alt=""/>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <!--<p class="pull-scroll">继续上拉到下一个商户</p>-->
@@ -32,20 +32,23 @@
     </article>
     <script type="text/html" id="partner_share_template">
         <section id="partner_share_section" class="active">
-            <nav class="share_nav">
+            <nav class="share_nav close_share">
                 <a href="#" class="btn_close"></a>
             </nav>
             <article class="share_active">
                 <div class="share_wrap">
                     <ul class="lis_app">
-                        <li class="app"><a href="#" class="app_ln2">WECHAT</a></li>
-                        <li class="app app_no"><a href="#" class="app_ln3">MOMENT</a></li>
-                        <li class="app"><a href="#" class="app_ln1">WEIBO</a></li>
-                        <li class="app"><a href="#" class="app_ln4">INSTAGRAM</a></li>
-                        <li class="app"><a href="#" class="app_ln5">FACEBOOK</a></li>
-                        <li class="app"><a href="#"  class="app_ln6">TWITTER</a></li>
+                        {{each list as value i}}
+                        {{if value.isBound}}
+                        <li class="app app_no"><a href="#" class="app_ln{{i+1}}">{{value.name}}</a></li>
+                        {{else}}
+                        <li class="app"><a href="#" class="app_ln{{i+1}}">{{value.name}}</a></li>
+                        {{/if}}
+                        {{/each}}
+
                     </ul>
                 </div>
+                <div class="close_bg close_share"></div>
             </article>
         </section>
     </script>
@@ -58,5 +61,20 @@
             </ul>
 			<a href="#" class="btn_route_close">取消</a>
         
+    </script>
+    <script type="text/html" id="partner_content_template">
+        <h1 class="tit_partner">{{name}}</h1>
+        <p class="de_par_time">{{duration}}</p>
+        <p class="de_par_mes mes1">{{address}}</p>
+        <p class="de_par_mes mes2"><span>{{phone}}</span><a class="btn_tele" href="tel:{{phone}}"></a></p>
+        <p class="de_par_mes mes3">{{desc}}</p>
+        {{if pics}}
+        <div class="de_par_eve">
+            <p class="de_img_tit">Events.</p>
+            {{each pics as pic index}}
+            <div class="de_par_wr"><img class="de_par_img" src="{{pic}}" alt=""/></div>
+            {{/each}}
+        </div>
+        {{/if}}
     </script>
 </section>

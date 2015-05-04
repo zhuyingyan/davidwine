@@ -14,7 +14,7 @@
         {{each data as value i}}
         <li class="news_it">
             <a class="news_ln" href="#news_detail_section"  data-target="section" >
-                <img class="news_pic" src="{{value.pics[0]}}" alt="{{value.title}}"/>
+                <div class="news_lis_wr"><img class="news_pic" src="{{value.pics[0]}}" alt="{{value.title}}"/></div>
                 <hgroup class="news_group ">
                     <h1 class="news_main">{{value.title}}</h1>
                     <h2 class="news_if">{{value.time}}</h2>

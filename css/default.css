@@ -137,8 +137,10 @@ section.active{z-index: 6 ;display: block;}
 #tag_close_popup{color: #BDC3C7;}
 #jingle_popup .nav{color: #000; }
 #jingle_popup .nav.active,#jingle_popup .nav:active{background-color: #79db8d !important;color: #fff;}
-#jingle_popup.loading{background-color: rgba(220,220,220,1);box-shadow: 1px 1px 3px rgba(0,0,0,.1),-1px -1px 3px rgba(0,0,0,.1);display: -webkit-box;display: -webkit-flex;-webkit-flex-direction: column;display: flex;
-  flex-direction: column;-webkit-box-align:center; -webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;}
+#jingle_popup.loading{background-color: rgba(220,220,220,1);box-shadow: 1px 1px 3px rgba(0,0,0,.1),-1px -1px 3px rgba(0,0,0,.1);display: -webkit-box;display: -webkit-flex;display: flex;
+  -webkit-box-direction: normal;-webkit-box-orient: vertical;-webkit-flex-direction: column;flex-direction: column;
+  -webkit-box-align: center;-webkit-align-items:center;align-items:center;
+  -webkit-box-pack: center;-webkit-justify-content:center;justify-content:center;}
 #jingle_popup.loading p{color: #000;font-size:0.7rem;text-align: center;line-height:0.6rem;padding-top:3rem;position:relative;}
 #jingle_popup.loading i.icon{width:2.28125rem;height:1.53125rem;background: url(../imgs/loading.png); background-size:cover;
     position: absolute;top:0.5rem;left:50%;margin-left:-1.25rem;

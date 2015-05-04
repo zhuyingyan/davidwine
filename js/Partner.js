@@ -127,7 +127,7 @@ function markEvent(num){
 //  返回content的html
 function contentHTML(a,b,c){
 	var content ;
-	content = "<h2 style='font-size: 14px;'>"+a+"</h2><p style='font-size: 12px;'>"+b+"</p><a href='"+c+"' style='font-size: 12px; display: block; color: rgb(0, 0, 0); position: absolute; top: 12px; padding: 3px 7px; right: 10px; border-radius: 3px; background-color: rgb(255, 255, 255);'>导航</a><div style='position: absolute; border-top-width: 10px; border-top-style: solid; border-top-color: rgba(0, 0, 0, 0.6); border-left-width: 8px; border-left-style: solid; border-left-color: transparent; border-right-width: 8px; border-right-style: solid; border-right-color: transparent; bottom: -10px; left: 30%; margin-left: -5px;'></div>";		
+	content = "<h2 style='font-size: 16px;padding:5px;'>"+a+"</h2><p style='font-size: 14px;padding:0 5px 3px 5px;'>"+b+"</p><a href='"+c+"' style='width:36px;height:36px;background:url(imgs/road.png);background-size:100% 100%;display:block;position:absolute;right:10px;top:13px;'></a><div style='position: absolute; border-top-width: 13px; border-top-style: solid; border-top-color: rgba(0, 0, 0, 0.6); border-left-width: 13px; border-left-style: solid; border-left-color: transparent; border-right-width: 13px; border-right-style: solid; border-right-color: transparent; bottom: -13px; left: 30%; margin-left: -6px;'></div>";		
 	return content;
 }
 
@@ -200,6 +200,7 @@ function Partner(country,countryNum,city,cityNum,object){
 	this.name = object.name;
 	this.phone = object.phone;
 	this.wechat = object.webchat;
+    this.pics = object.pics;
 	this.distance = -1;
 	this.isCity = false;
 }
@@ -270,7 +271,8 @@ var cityPoint = {
 
 // 用于 partners 地图
 var partnerBd = {
-	jsonUrl:"http://120.24.85.210/api/getPartners.php?callback=?",
+	//jsonUrl:"http://120.24.85.210/api/getPartners.php?callback=?",
+	jsonUrl:"http://davidwine.cn/api/getPartners.php?callback=?",
 	data:[],
 	country:"china",                                  //设定我所在的国家
 	defaultIconObj:{url:'imgs/m0.png',w:30,h:24},     //设定默认商家的icon
@@ -284,6 +286,17 @@ var partnerBd = {
             {url:'imgs/m8.png',w:30,h:24},
             {url:'imgs/m9.png',w:30,h:24},
             {url:'imgs/m10.png',w:30,h:24}],          //设定位置远近的10个等级
+	defaultBIconObj:{url:'imgs/m0b.png',w:59,h:46},     //用于子页的大icon
+	levelBIconObj : [{url:'imgs/m1b.png',w:59,h:46},
+            {url:'imgs/m2b.png',w:59,h:46},
+            {url:'imgs/m3b.png',w:59,h:46},
+            {url:'imgs/m4b.png',w:59,h:46},
+            {url:'imgs/m5b.png',w:59,h:46},
+            {url:'imgs/m6b.png',w:59,h:46},
+            {url:'imgs/m7b.png',w:59,h:46},
+            {url:'imgs/m8b.png',w:59,h:46},
+            {url:'imgs/m9b.png',w:59,h:46},
+            {url:'imgs/m10b.png',w:59,h:46}],          //用于子页的大icon
 	mySiteIconObj:{url:'imgs/me.png',w:24,h:24},      //设定我的位置的icon
 	
 	mainMapString:"allmap",                           //Partner页的Map的ID
@@ -311,6 +324,7 @@ var partnerBd = {
 	
 	_resultLocal:[],                                   //记录当前城市的partner数组,用于detail下一步的计算
 	_current:-1,                                       //当前的detail是在result里面的第几个
+	clickSite:false,                                   //是否点击了获取当前位置
 	_init:function(){
         var _self = this,url = _self.jsonUrl;
 		if(_self.data.length){
@@ -318,10 +332,10 @@ var partnerBd = {
 		}else{
 			$.ajax({
 				url : url,
-				dataType : 'jsonp',
+				//dataType : 'jsonp',
 				timeout : 20000,
 				success : function(data){
-					
+                    data = JSON.parse(data);
 					_self.data = data.data;
 					console.log(data);
 					_self.openMap(data.data);
@@ -376,8 +390,9 @@ var partnerBd = {
 			}
 			partnerArr = changePartnerArr(cityData.citylist,_self.country,_self.courtryNum);
 			_self.partnerArr = partnerArr;
-			_self.showCityPartnersList(map,defaultIconObj,cityArr,partnerArr,"partner");
-			
+			_self.showCityPartnersList(map,_self.levelIconObj,cityArr,partnerArr,"partner");
+			//console.log(_self.partnerArr);
+			//_self.showCityPartnersDis(map,_self.levelIconObj,_self.partnerArr,"partner");
         }
         var myCity = new BMap.LocalCity();
         myCity.get(myFun);
@@ -388,6 +403,7 @@ var partnerBd = {
         geolocation.getCurrentPosition(function(r){
             if(this.getStatus() == BMAP_STATUS_SUCCESS){
                 var mk ,mySiteIconObj,mySiteIcon,point;
+				J.hideMask();
 				point = r.point;
                 mySiteIconObj = _self.mySiteIconObj;
 				map.clearOverlays();
@@ -419,6 +435,8 @@ var partnerBd = {
                 });
             }
             else {
+				J.hideMask();
+				J.showToast('位置没法获取，请稍等再试');
                 console.log('site error')
             }
         },{enableHighAccuracy: true});
@@ -435,7 +453,7 @@ var partnerBd = {
 			if(i<_self.showPartnerNum){
 				result10.partners.push(partTemp);
 				point = new BMap.Point(partTemp.lng,partTemp.lat);
-				mark = addMarker(iconObj,point,map);
+				mark = addMarker(iconObj[i],point,map);
 				mark.addEventListener("click",markEvent(i)); 
 			}else{
 				resultlast.partners.push(partTemp);
@@ -450,12 +468,13 @@ var partnerBd = {
 		setTimeout(function(){
 		    J.Scroll($('#'+sectionID+'_article'));    
 		    J.hideMask();
+			$('#mySite').trigger("click");
 		},2300);
 	},
 	//  将层级图标标注在地图上,并把商户信息插入到页面
 	showCityPartnersDis:function(map,iconObj,partnerArr,sectionID){
 		var _self =this,partLen = partnerArr.length,i,point,partTemp,result = [],result10 ={},resultlast={},mark;
-		result10.partners=[],resultlast.partners = [];
+		result10.partners=[],result10.clickable = _self.clickSite,resultlast.partners = [];
 		for(i = 0;i < partLen;i++){
 			partTemp = partnerArr[i];
 			partTemp.setItem(i);
@@ -475,7 +494,7 @@ var partnerBd = {
 		}
 		
 		if(i>_self.showPartnerNum){$('.'+_self.showLastClass).show();}
-		//console.log(result10);
+		console.log(result10);
 		_self._resultLocal = result;
 		_self.lastPartner = resultlast;
 		J.tmpl('#'+sectionID+'Lis',sectionID+'_template',result10,"replace");
@@ -485,23 +504,33 @@ var partnerBd = {
 		},2300);
 	},
 	routePolicy:function(map,start,end,isbus){
+		var symmetry,syX,syY,routePoiFun;
         if(isbus===1){
-            var transit = new BMap.TransitRoute(map, {
-                renderOptions: {map: map}
+			routePoiFun = new BMap.TransitRoute(map, {
+                renderOptions: {map: map,autoViewport: false}
             });
-            transit.search(start,end);
+			routePoiFun.search(start,end);
+
+
         } else if(isbus===0){
-            var transit = new BMap.WalkingRoute(map, {
-                renderOptions: {map: map}
+			routePoiFun = new BMap.WalkingRoute(map, {
+                renderOptions: {map: map,autoViewport: false}
             });
-            transit.search(start,end);
+			routePoiFun.search(start,end);
         } else{
-            var driving = new BMap.DrivingRoute(map, {
-                renderOptions:{map: map}
+			routePoiFun = new BMap.DrivingRoute(map, {
+                renderOptions:{map: map,autoViewport: false}
             });
-            driving.search(start,end);
+			routePoiFun.search(start,end);
+
         }
-		
+		syX = 2*end.lat - start.lat;
+		syY = 2*end.lng - start.lng;
+		symmetry = new BMap.Point(syY,syX);
+
+		map.setViewport([start,end,symmetry],{viewportOptions:{margins:[10,10,10,10]}});
+
+		return routePoiFun;
     },
 	// 找到最近的商户
 	nearestPart:function(map,callback){
@@ -576,16 +605,20 @@ var partnerBd = {
 	showInfoWinSearch:function(mp,desPartner){
 		var _self = this,desPartner =desPartner|| _self._resultLocal[_self._current],origin,destination,sContent,urlArr = [],myCompOverlay = new BMap.Label(),content;
 		destination = desPartner.lat+","+desPartner.lng;
-		myCompOverlay.setStyle({ color : "white", borderRadius:"3px",fontSize : "12px",display : "block",lineHeight : "18px", fontFamily:"微软雅黑",padding : "6px",paddingRight : "62px",background:"rgba(0,0,0,.6)", border:"0"});
+		myCompOverlay.setStyle({ color : "white",fontSize : "12px",display : "block",lineHeight : "18px", fontFamily:"微软雅黑",padding : "6px",paddingRight : "62px",background:"rgba(0,0,0,.6)", border:"0"});
 		myCompOverlay.setPosition(new BMap.Point(desPartner.lng,desPartner.lat));
-		myCompOverlay.setOffset(new BMap.Size(-70,-90));
+		myCompOverlay.setOffset(new BMap.Size(-88,-90));
 		if(_self.mySitePoint){
 			origin = _self.mySitePoint.lat+","+_self.mySitePoint.lng;
 			cityName = _self.siteCity;
 			urlArr.push( "http://apis.map.qq.com/uri/v1/routeplan?type=bus&from=我的位置&fromcoord="+origin+"&to="+desPartner.name+"&tocoord="+destination+"&policy=1&referer=DAVIDWINE");							
 			urlArr.push( "baidumap://map/direction?origin="+origin+"&destination="+destination+"&mode=driving&src=");	
-			urlArr.push( "http://maps.apple.com/?daddr="+origin+"&saddr="+destination);										
-			content =contentHTML(desPartner.name,desPartner.address,"#");											
+			urlArr.push( "http://maps.apple.com/?daddr="+origin+"&saddr="+destination);
+			if(desPartner.distance>1000){
+				content =contentHTML(desPartner.name,"距离："+(desPartner.distance/1000).toFixed(1)+"km","#");
+			}else{
+				content =contentHTML(desPartner.name,"距离："+desPartner.distance+"m","#");
+			}
 			myCompOverlay.setContent(content);
 			myCompOverlay.addEventListener("click",function(event){
 				
@@ -607,8 +640,12 @@ var partnerBd = {
 						cityName = addComp.city;
 						urlArr.push( "http://apis.map.qq.com/uri/v1/routeplan?type=bus&from=我的位置&fromcoord="+origin+"&to="+desPartner.name+"&tocoord="+destination+"&policy=1&referer=DAVIDWINE");							
 						urlArr.push( "baidumap://map/direction?origin="+origin+"&destination="+destination+"&mode=driving&src=");	
-						urlArr.push( "http://maps.apple.com/?daddr="+origin+"&saddr="+destination);							
-						content =contentHTML(desPartner.name,desPartner.address,"#");
+						urlArr.push( "http://maps.apple.com/?daddr="+origin+"&saddr="+destination);countPartArrDis(_self.mainMap,point,_self.partnerArr);
+						if(desPartner.distance>1000){
+							content =contentHTML(desPartner.name,"距离："+(desPartner.distance/1000).toFixed(1)+"km","#");
+						}else{
+							content =contentHTML(desPartner.name,"距离："+desPartner.distance+"m","#");
+						}
 						myCompOverlay.setContent(content);
 						myCompOverlay.addEventListener("click",function(event){
 								//J.Router.goTo("#index_section",function(){});

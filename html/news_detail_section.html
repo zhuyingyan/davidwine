@@ -18,10 +18,10 @@
             <div class="news_content">
                 {{each picWordArr as value i}}
                     {{if value.word}}
-                    <p class="news_content_word">{{value.word}}</p>
+                    <p class="news_content_word">{{#value.word}}</p>
                     {{/if}}
                     {{if value.pic}}
-                    <p><img src="{{value.pic}}" alt=""/></p>
+                    <div class="news_pic_wr"><img src="{{value.pic}}" alt="" class="news_pic"/></div>
                     {{/if}}
                 {{/each}}
             </div>
@@ -30,20 +30,23 @@
     </script>
     <script type="text/html" id="news_share_template">
         <section id="news_share_section" class="active">
-            <nav class="share_nav">
+            <nav class="share_nav close_share">
                 <a href="#" class="btn_close"></a>
             </nav>
             <article class="share_active">
                 <div class="share_wrap">
                     <ul class="lis_app">
-                        <li class="app"><a href="#" class="app_ln2">WECHAT</a></li>
-                        <li class="app app_no"><a href="#" class="app_ln3">MOMENT</a></li>
-                        <li class="app"><a href="#" class="app_ln1">WEIBO</a></li>
-                        <li class="app"><a href="#" class="app_ln4">INSTAGRAM</a></li>
-                        <li class="app"><a href="#" class="app_ln5">FACEBOOK</a></li>
-                        <li class="app"><a href="#"  class="app_ln6">TWITTER</a></li>
+                        {{each list as value i}}
+                        {{if value.isBound}}
+                        <li class="app app_no"><a href="#" class="app_ln{{i+1}}">{{value.name}}</a></li>
+                        {{else}}
+                        <li class="app"><a href="#" class="app_ln{{i+1}}">{{value.name}}</a></li>
+                        {{/if}}
+                        {{/each}}
+
                     </ul>
                 </div>
+                <div class="close_bg close_share"></div>
             </article>
         </section>
     </script>

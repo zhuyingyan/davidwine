@@ -1,0 +1,121 @@
+<section id="history_section"  data-transition="popup">
+    <nav class="history_nav">
+        <a href="#" class="btn_back" data-icon="previous" data-target="back"></a>
+        <a class="btn_share"  id="btn_share" href="#" ></a>
+
+    </nav>
+    <article class="active" id="history_article"  >
+        <div class="history_container">
+            <div class="history_wrapper" >
+                <div class="his_slide his_slide1">
+					<div class="his_slide_bg his_slide1_bg" ></div>
+                    <div class="content" >
+                        <h2 class="his_slide_tit">声望</h2>
+                        <p>Davidwine Collection产自于西 班牙Murcia省Jumilla高原(法定D O产区) </p>
+                        <p>正如我们祖父所说的：饮用上等葡萄酒不仅滋养协调我们的饮食更能让我们体会葡萄酒带来的身心愉悦。这正是品质优秀的葡萄酒所具有的非凡使命。</p>
+                        <p>Davidwine Collection的优雅柔滑，刚劲深浓，赏心悦目等特殊完美结合使消费者能尽情想用不同类型的葡萄酒。</p>
+                    </div>
+					<span class="ico_slide_down"></span>
+                </div>
+                <div class="his_slide his_slide2" >
+					<div class="his_slide_bg his_slide2_bg" ></div>
+                    <div class="content" >
+                        <h2 class="his_slide_tit">时光</h2>
+                        <p>Davidwine Collection源自一个 专业从事农业和商贸的世代家族。 </p>
+                        <p>正自1918年以来，我们一直在工作 上兢兢业业，在质量上精益求精，在产品上不断创新，拥有近百年在种植、采摘页、加工业和环球经销的宝贵经验和阅历，是我们的产品具有高品质的基石和保证。</p>
+                    </div>
+                    <span class="ico_slide_down"></span>
+                </div>
+                <div class="his_slide his_slide3">
+					<div class="his_slide_bg his_slide3_bg" ></div>
+                    <div class="content" >
+                        <h2 class="his_slide_tit">秘诀</h2>
+                        <p>Davidwine  Collection有葡萄园一站 在中国注册公司亲自清关税在华正规进 口，不经酒庄，产酒国或进口国代理，业正因我们直接控制原材料种植，采摘，
+                            加工酿造储存工艺，亲自一站式完成西班牙出口到中国清关进口的流程，在品质控制和价格上我们都占有无可比拟的优势。</p>
+                    </div>
+                    <span class="ico_slide_down"></span>
+                </div>
+                <div class="his_slide his_slide4">
+					<div class="his_slide_bg his_slide4_bg" ></div>
+                    <div class="content" >
+                        <p>我们在JUMILLA高原上拥有400公顷的葡萄园。我们家族的JUMILLA种植的葡萄供给DO JUMILLA产区上的酒庄近百年。</p>
+                        <p>西班牙最具地中海风情的葡萄品种Monastrell便是出自我们家族时代的双手。</p>
+                        <p>地处南欧地中海沿岸的葡萄酒产区的酒和人都带有其地区的风情。不模仿，不跟风，坚持酿出本地葡萄品种特有的风味。</p>
+                    </div>
+                    <span class="ico_slide_down"></span>
+                </div>
+                <div class="his_slide his_slide5">
+                    <div class="his_slide5_wr">
+
+                    </div>
+                    <!--<div class="pic_slideshow pic_slider1">
+                        <ul class="pic_slideshow_wr">
+                            <li class="pic_slide"><img src="pics/his-lis1.jpg" alt=""/></li>
+                            <li class="pic_slide"><img src="pics/his-lis2.jpg" alt=""/></li>
+                            <li class="pic_slide"><img src="pics/his-lis3.jpg" alt=""/></li>
+                        </ul>
+                    </div>
+                    <div class="pic_slideshow pic_slider2">
+                        <ul class="pic_slideshow_wr">
+                            <li class="pic_slide"><img src="pics/his-lis4.jpg" alt=""/></li>
+                            <li class="pic_slide"><img src="pics/his-lis5.jpg" alt=""/></li>
+                            <li class="pic_slide"><img src="pics/his-lis6.jpg" alt=""/></li>
+                        </ul>
+                    </div>
+                    <div class="pic_slideshow pic_slider3">
+                        <ul class="pic_slideshow_wr">
+                            <li class="pic_slide"><img src="pics/his-lis1.jpg" alt=""/></li>
+                            <li class="pic_slide"><img src="pics/his-lis2.jpg" alt=""/></li>
+                            <li class="pic_slide"><img src="pics/his-lis3.jpg" alt=""/></li>
+                        </ul>
+                    </div>
+                    <div class="pic_slideshow pic_slider4">
+                        <ul class="pic_slideshow_wr">
+                            <li class="pic_slide"><img src="pics/his-lis4.jpg" alt=""/></li>
+                            <li class="pic_slide"><img src="pics/his-lis5.jpg" alt=""/></li>
+                            <li class="pic_slide"><img src="pics/his-lis6.jpg" alt=""/></li>
+                        </ul>
+                    </div>-->
+                    <div class="btn_share_wr">
+                        <a class="btn_share_big btn_no" href="#">马上分享</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <!--popup temple-->
+    <script type="text/html" id="history_template">
+        {{each data as value i}}
+        <div class="pic_slideshow pic_slider{{i+1}}">
+            <ul class="pic_slideshow_wr">
+                {{each value.pics as pic i}}
+                <li class="pic_slide"><img src="{{pic}}" alt=""/></li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/each}}
+    </script>
+    <script type="text/html" id="history_share_template">
+        <section id="history_share_section" class="active">
+            <nav class="share_nav close_share">
+                <a href="#" class="btn_close"></a>
+            </nav>
+            <article class="share_active">
+                <div class="share_wrap">
+                    <ul class="lis_app">
+                        {{each list as value i}}
+                        {{if value.isBound}}
+                        <li class="app app_no"><a href="#" class="app_ln{{i+1}}">{{value.name}}</a></li>
+                        {{else}}
+                        <li class="app"><a href="#" class="app_ln{{i+1}}">{{value.name}}</a></li>
+                        {{/if}}
+                        {{/each}}
+
+                    </ul>
+                </div>
+                <div class="close_bg close_share"></div>
+            </article>
+        </section>
+    </script>
+</section>
