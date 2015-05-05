@@ -520,7 +520,7 @@ App.page('partner_detail',function(){
 //http://120.24.85.210/api/getSouvenir.php?callback=?
 App.page('souvenir',function(){
     this.init = function(){
-        var url = 'http://davidwine.cn/api/getSouvenir.php?callback=?';
+        var url = 'http://120.24.85.210/api/getSouvenir.php?callback=callback';
         //var url = 'api/getSouvenir.php';
         console.log("这里是Souvenir");
         J.showMask();
@@ -647,7 +647,7 @@ App.page('souvenir_detail',function(){
 App.page('product',function(){
     this.init = function(){
         console.log("这里是product");
-        var url = 'http://davidwine.cn/api/getProducts.php?callback=?';
+        var url = 'http://120.24.85.210/api/getProducts.php?callback=callback';
         J.showMask();
         $.ajax({
             url : url,
@@ -696,7 +696,7 @@ App.page('product_detail',function(){
 
 App.page('news',function(){
     this.init = function(){
-        var url = 'http://davidwine.cn/api/getNews.php?callback=?';
+        var url = 'http://120.24.85.210/api/getNews.php?callback=callback';
         //var url = 'api/getNews.php';
         console.log("这里是news");
         $.ajax({

@@ -14,23 +14,35 @@ function addMarker(iconObj,point,map){
 }
 //将城市数据变成City类对象数组，返回City对象数组
 function changeCityArr(data,country,countryNum){
-	var i,len = data.length,cityArr=[],cityTemp;
+	var i,len = data.length,cityArr=[],cityTemp,tempCitylist,j;
 	for(i = 0;i<len;i++){
-		cityTemp = new City(country,countryNum,data[i].city,i,data[i].partners.length);
-		cityArr.push(cityTemp);
+		for(j = 0;j<data[i].citylist.length;j++) {
+			tempCitylist =  data[i].citylist[j];
+			if(tempCitylist.city!="") {
+				cityTemp = new City(country, countryNum, tempCitylist.city, j, tempCitylist.partners.length);
+				cityArr.push(cityTemp);
+			}
+		}
 	}
 	return cityArr;
 }
 //将data数据变成Partner类对象数组，返回Partner对象数组
-function changePartnerArr(data,country,countryNum){
-	var i,j,len = data.length,partLen,partArr=[],partTemp,cityTemp;
+function changePartnerArr(data,country,provinceNum){
+	var i,j,len = data.length,citytLen,partLen,partArr=[],partTemp,cityTemp, z,provinceTemp;
 	
 	for(i = 0;i<len;i++){
-		cityTemp = data[i];
-		partLen = cityTemp.partners.length;
-		for(j = 0;j < partLen;j++){
-			partTemp = new Partner(country,countryNum,cityTemp.city,i,cityTemp.partners[j]);
-			partArr.push(partTemp);
+		provinceTemp = data[i];
+		citytLen = provinceTemp.citylist.length;
+		for(j = 0;j < citytLen;j++){
+			cityTemp = provinceTemp.citylist[j];
+			if(cityTemp.city!=="") {
+				partLen = cityTemp.partners.length;
+
+				for (z = 0; z < partLen; z++) {
+					partTemp = new Partner(country, provinceNum, cityTemp.city, j, cityTemp.partners[z]);
+					partArr.push(partTemp);
+				}
+			}
 		}
 		
 	}
@@ -41,8 +53,9 @@ function findCityPartner(city,data){
 	if(!data.length)  return false;
 	var len = data.length,i;
 	for(i = 0;i<len;i++){
-	   
-		if(data[i].city.indexOf(city)!=-1 || city.indexOf(data[i].city)!=-1) return i;
+		if(data[i].city!=="") {
+			if (data[i].city.indexOf(city) != -1 || city.indexOf(data[i].city) != -1) return i;
+		}
 	}
 	return -1;
 }
@@ -103,7 +116,7 @@ function findCityPartners(city,partArr){
 //  对输入的字进行搜索
 function searchWord(word,cityArr,partArr){
 	var i,j,len = cityArr.length,partLen = partArr.length,searchArr = [];
-	
+
 	for(i = 0;i<len;i++){
 		if(cityArr[i].city.indexOf(word)!==-1){
 			searchArr.push(cityArr[i]);
@@ -184,10 +197,30 @@ function picWordArr(array){
     }
 }
 
+//返回省份名称
+function getProvince(pt,success){
+	var geoc = new BMap.Geocoder();
+	geoc.getLocation(pt, function(rs){
+		var addComp = rs.addressComponents;
+		success(addComp.province);
+	});
+
+
+}
+//返回省份位置
+function findProvinceNum(data,province){
+	if(!data.length)  return false;
+	var len = data.length,i;
+	for(i = 0;i<len;i++){
+		if(data[i].province.indexOf(province)!=-1 || province.indexOf(data[i].province)!=-1) return i;
+	}
+	return -1;
+}
+
 // 类
-function Partner(country,countryNum,city,cityNum,object){
+function Partner(country,provinceNum,city,cityNum,object){
 	this.country = country;
-	this.countryNum = countryNum;
+	this.provinceNum = provinceNum;
 	this.city = city;
 	this.cityNum = cityNum;
 	this.id = object.id;
@@ -216,9 +249,9 @@ Partner.prototype.setItem = function(i){
 }
 
 
-function City(country,countryNum,cityname,cityNum,length,isGPS){
+function City(country,provinceNum,cityname,cityNum,length,isGPS){
 	this.country = country;
-	this.countryNum = countryNum;
+	this.provinceNum = provinceNum;
 	this.city = cityname;
 	this.cityNum = cityNum;
 	this.partnersNum = length;
@@ -272,7 +305,7 @@ var cityPoint = {
 // 用于 partners 地图
 var partnerBd = {
 	//jsonUrl:"http://120.24.85.210/api/getPartners.php?callback=?",
-	jsonUrl:"http://davidwine.cn/api/getPartners.php?callback=?",
+	jsonUrl:"http://120.25.233.75/api/getPartners.php?callback=callback",
 	data:[],
 	country:"china",                                  //设定我所在的国家
 	defaultIconObj:{url:'imgs/m0.png',w:30,h:24},     //设定默认商家的icon
@@ -303,8 +336,8 @@ var partnerBd = {
 	partmapString:"partmap",                          //Partner_detail的Map的ID
 	mainMap:{},                                       //Partner页的Map对象
 	partMap:{},                                       //Partner_detail页的Map对象
-	
-	courtryNum:-1,                                    //记录我所在国家的索引
+
+	provinceNum:-1,                                    //记录我所在省份的索引
 	isNoPartner:0,                                    //记录所在城市是否有partners
 	localCity:"",                                     //记录我所在城市的名字
 	siteCity:"",                                       // 通过定位获取的城市名字，有时候跟上面的不一样
@@ -332,10 +365,10 @@ var partnerBd = {
 		}else{
 			$.ajax({
 				url : url,
-				//dataType : 'jsonp',
+				dataType : 'jsonp',
 				timeout : 20000,
 				success : function(data){
-                    data = JSON.parse(data);
+                    //data = JSON.parse(data);
 					_self.data = data.data;
 					console.log(data);
 					_self.openMap(data.data);
@@ -355,44 +388,45 @@ var partnerBd = {
         map.centerAndZoom(point,11);
         map.enableScrollWheelZoom(true);
 
-        //寻找中国位置
-		console.log(data);
-        for(count = 0;count<data.length;count++){
-            if(data[count].country.toLowerCase().indexOf(_self.country)!=-1){
-                _self.courtryNum = count;
-            }
-        }
-
         // 更改所在城市
         function myFun(result){
             var i,cityData,cityArr = [],partnerArr = [];           
             cityName = result.name;
-            _self.localCity = cityName;
-            map.setCenter(cityName);		
-            _self.currentCityNum = i = findCityPartner(/*cityName"深圳""广州"*/cityName,data[_self.courtryNum].citylist);
-			cityData = _self.data[_self.courtryNum];
-			
-            if(i===false||i==-1){      // 如果没有该城市的数据，就显示全国的
-				findNearCity(cityData,map,cityName);		//将有商户而且最近的城市的放到最前面		
-				_self.currentCityNum = i = 0;
-				_self.isNoPartner = 1;
-				cityArr = changeCityArr(cityData.citylist,_self.country,_self.courtryNum);
-				_self.cityArr = cityArr;
-				//_self.otherCity(map);
-			}
-			else{
-				findGPSCity(cityData,i);		//将所在城市的放到最前面		
-				_self.currentCityNum = i = 0;
-				// 建立City对象数组
-				cityArr = changeCityArr(cityData.citylist,_self.country,_self.courtryNum);
-				cityArr[0].setIsGPS(true);
-				_self.cityArr = cityArr;				
-			}
-			partnerArr = changePartnerArr(cityData.citylist,_self.country,_self.courtryNum);
-			_self.partnerArr = partnerArr;
-			_self.showCityPartnersList(map,_self.levelIconObj,cityArr,partnerArr,"partner");
-			//console.log(_self.partnerArr);
-			//_self.showCityPartnersDis(map,_self.levelIconObj,_self.partnerArr,"partner");
+			_self.localCity = cityName;
+			map.setCenter(cityName);
+
+			getProvince(result.center,function(province){
+				_self.provinceNum = findProvinceNum(data,province);
+				_self.currentCityNum = i = findCityPartner(/*cityName"深圳""广州"*/"深圳",data[_self.provinceNum].citylist);
+
+
+				cityData = _self.data[_self.provinceNum];
+
+				if(i===false||i==-1){      // 如果没有该城市的数据，就显示全国的
+					findNearCity(cityData,map,cityName);		//将有商户而且最近的城市的放到最前面
+					_self.currentCityNum = i = 0;
+					_self.isNoPartner = 1;
+					cityArr = changeCityArr(cityData.citylist,_self.country,_self.courtryNum);
+					_self.cityArr = cityArr;
+					//_self.otherCity(map);
+				}
+				else{
+					findGPSCity(cityData,i);		//将所在城市的放到最前面
+					_self.currentCityNum = i = 0;
+					// 建立City对象数组
+					cityArr = changeCityArr(data,_self.country,_self.provinceNum);
+					cityArr[0].setIsGPS(true);
+					_self.cityArr = cityArr;
+				}
+				partnerArr = changePartnerArr(data,_self.country,_self.provinceNum);
+				_self.partnerArr = partnerArr;
+				_self.showCityPartnersList(map,_self.levelIconObj,cityArr,partnerArr,"partner");
+				//console.log(_self.partnerArr);
+				//_self.showCityPartnersDis(map,_self.levelIconObj,_self.partnerArr,"partner");
+			});
+
+
+
         }
         var myCity = new BMap.LocalCity();
         myCity.get(myFun);
@@ -402,7 +436,7 @@ var partnerBd = {
         var geolocation = new BMap.Geolocation(),cityName, i,_self = partnerBd,cityList;
         geolocation.getCurrentPosition(function(r){
             if(this.getStatus() == BMAP_STATUS_SUCCESS){
-                var mk ,mySiteIconObj,mySiteIcon,point;
+                var mk ,mySiteIconObj,mySiteIcon,point,province;
 				J.hideMask();
 				point = r.point;
                 mySiteIconObj = _self.mySiteIconObj;
@@ -417,12 +451,15 @@ var partnerBd = {
                 geoc.getLocation(point, function(rs){
                     var addComp = rs.addressComponents;
                     cityName = addComp.city;
+					province = addComp.province;
+					_self.provinceNum = findProvinceNum(_self.data,province);
                     _self.siteCity = cityName;
                     if(_self.localCity.indexOf(_self.siteCity)==-1||_self.siteCity.indexOf(_self.localCity)==-1){
-                        _self.currentCityNum = i = _self.findCityPartner(/*"深圳"cityName*/cityName,_self.data[_self._courtryNum].citylist);
+                        _self.currentCityNum = i = findCityPartner(/*"深圳"cityName*/cityName,_self.data[_self.provinceNum].citylist);
                     }else{
 						i = _self.currentCityNum;
 					}
+					console.log(_self.partnerArr);
 					countPartArrDis(map,point,_self.partnerArr);
 					// 按距离排序
 					_self.partnerArr.sort(function(a,b){
