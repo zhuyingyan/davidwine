@@ -72,10 +72,13 @@ function findNearCity(array,map,cityName){
 	citys.push(cityName);
 	for(i = 0;i<len;i++){
 		tempCity = array.citylist[i];
-		citys.push(tempCity.city);
+		if(tempCity.city!=="") {
+			citys.push(tempCity.city);
+		}
 		//tempCity.nearDis = map.getDistance(ori,des);
 		//ori = new BMap.Point();
 	}
+	console.log(citys);
 	cityPoint.adds = citys;
 	cityPoint.goBdGEO(function(){
 		console.log(cityPoint.points);
@@ -85,7 +88,7 @@ function findNearCity(array,map,cityName){
 		}
 		array.citylist.sort(function(a,b){
 			return a.nearDis - b.nearDis;
-		})
+		});
 		//console.log(array);
 	});
 	
@@ -178,16 +181,16 @@ function popMap(urlArr){
 
 //返回图文数组
 function picWordArr(array){
-    var i,temp, j,wordArr, z,picArr;
+    var i,temp, j,wordArr, z,picArr,reg = /\uff08\u56fe\u7247\uff1a\u65b0\u95fb\u002d[1-5]\u002d[1-5]\uff09/;
     for(i = 0;i < array.length;i++){
         temp = array[i];
-        wordArr = temp.content.split("\n");
+        wordArr = temp.content.split(reg);
         temp.picWordArr = [];
         picArr = temp.pics;
         for(j = 0,z = 1;j<wordArr.length||z<picArr.length;j++,z++){
             var obj = {};
             if(wordArr[j]){
-                obj.word =  wordArr[j];
+                obj.word =  wordArr[j].split("\n");
             }
             if(picArr[z]){
                 obj.pic =  picArr[z];
@@ -397,7 +400,7 @@ var partnerBd = {
 
 			getProvince(result.center,function(province){
 				_self.provinceNum = findProvinceNum(data,province);
-				_self.currentCityNum = i = findCityPartner(/*cityName"深圳""广州"*/"深圳",data[_self.provinceNum].citylist);
+				_self.currentCityNum = i = findCityPartner(/*cityName"深圳""广州"*/cityName,data[_self.provinceNum].citylist);
 
 
 				cityData = _self.data[_self.provinceNum];
@@ -406,7 +409,7 @@ var partnerBd = {
 					findNearCity(cityData,map,cityName);		//将有商户而且最近的城市的放到最前面
 					_self.currentCityNum = i = 0;
 					_self.isNoPartner = 1;
-					cityArr = changeCityArr(cityData.citylist,_self.country,_self.courtryNum);
+					cityArr = changeCityArr(data,_self.country,_self.provinceNum);
 					_self.cityArr = cityArr;
 					//_self.otherCity(map);
 				}
