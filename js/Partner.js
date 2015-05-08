@@ -68,6 +68,7 @@ function findGPSCity(array,i){
 }
 //  将最近有商户的城市放到第一位
 function findNearCity(array,map,cityName){
+	console.log(array);
 	var i ,len = array.citylist.length,tempCity =new BMap.Point(cityName),citys = [];
 	citys.push(cityName);
 	for(i = 0;i<len;i++){
@@ -400,6 +401,7 @@ var partnerBd = {
 
 			getProvince(result.center,function(province){
 				_self.provinceNum = findProvinceNum(data,province);
+
 				_self.currentCityNum = i = findCityPartner(/*cityName"深圳""广州"*/cityName,data[_self.provinceNum].citylist);
 
 
