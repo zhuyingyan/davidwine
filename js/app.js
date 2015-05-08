@@ -520,7 +520,7 @@ App.page('partner_detail',function(){
 //http://120.24.85.210/api/getSouvenir.php?callback=?
 App.page('souvenir',function(){
     this.init = function(){
-        var url = 'http://120.24.85.210/api/getSouvenir.php?callback=callback';
+        var url = 'http://120.25.233.75/api/getSouvenir.php?callback=callback';
         //var url = 'api/getSouvenir.php';
         console.log("这里是Souvenir");
         J.showMask();
@@ -647,7 +647,7 @@ App.page('souvenir_detail',function(){
 App.page('product',function(){
     this.init = function(){
         console.log("这里是product");
-        var url = 'http://120.24.85.210/api/getProducts.php?callback=callback';
+        var url = 'http://120.25.233.75/api/getProducts.php?callback=callback';
         J.showMask();
         $.ajax({
             url : url,
@@ -696,15 +696,15 @@ App.page('product_detail',function(){
 
 App.page('news',function(){
     this.init = function(){
-        //var url = 'http://120.24.85.210/api/getNews.php?callback=callback';
-        var url = 'api/getNews.php';
+        var url = 'http://120.25.233.75/api/getNews.php?callback=callback';
+        //var url = 'api/getNews.php';
         console.log("这里是news");
         $.ajax({
             url : url,
-            //dataType : 'jsonp',
+            dataType : 'jsonp',
             timeout : 20000,
             success : function(data){
-                data = JSON.parse(data);
+                //data = JSON.parse(data);
                 News.data =data;
                 News.maxLen = News.data.data.length;
                 picWordArr(News.data.data);
