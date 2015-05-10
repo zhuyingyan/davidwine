@@ -59,6 +59,15 @@ function findCityPartner(city,data){
 	}
 	return -1;
 }
+//  当所在城市的省份，把它调整到第一位
+function findProCity(array,i){
+	if(i) {
+		var j, temp, list = array;
+		temp = list.splice(i, 1);
+		list.unshift(temp[0]);
+	}
+	return array;
+}
 //  当所在城市有Partner时，把它调整到第一位
 function findGPSCity(array,i){
 	var j,temp,list = array.citylist;
@@ -68,24 +77,29 @@ function findGPSCity(array,i){
 }
 //  将最近有商户的城市放到第一位
 function findNearCity(array,map,cityName){
-	console.log(array);
-	var i ,len = array.citylist.length,tempCity =new BMap.Point(cityName),citys = [];
+	var i ,len = array.citylist.length,tempCity =new BMap.Point(cityName),citys = [],n;
 	citys.push(cityName);
 	for(i = 0;i<len;i++){
 		tempCity = array.citylist[i];
-		if(tempCity.city!=="") {
-			citys.push(tempCity.city);
-		}
+		//if(tempCity.city!=="") {
+		citys.push(tempCity.city);
+		//}
 		//tempCity.nearDis = map.getDistance(ori,des);
 		//ori = new BMap.Point();
 	}
-	console.log(citys);
+	//console.log(citys);
 	cityPoint.adds = citys;
 	cityPoint.goBdGEO(function(){
 		console.log(cityPoint.points);
-		for(i = 0;i<len;i++){
+		for(i = 0,n=0;i<len;i++,n++){
 			tempCity = array.citylist[i];
-			tempCity.nearDis = map.getDistance(cityPoint.points[0],cityPoint.points[i+1]);
+			if(tempCity.city=="") {
+				tempCity.nearDis = Infinity;
+				n--;
+				continue;
+			}
+			tempCity.nearDis = map.getDistance(cityPoint.points[0], cityPoint.points[n+1]);
+
 		}
 		array.citylist.sort(function(a,b){
 			return a.nearDis - b.nearDis;
@@ -398,12 +412,11 @@ var partnerBd = {
             cityName = result.name;
 			_self.localCity = cityName;
 			map.setCenter(cityName);
-
 			getProvince(result.center,function(province){
 				_self.provinceNum = findProvinceNum(data,province);
+				findProCity(data,_self.provinceNum);
 
 				_self.currentCityNum = i = findCityPartner(/*cityName"深圳""广州"*/cityName,data[_self.provinceNum].citylist);
-
 
 				cityData = _self.data[_self.provinceNum];
 
@@ -413,6 +426,7 @@ var partnerBd = {
 					_self.isNoPartner = 1;
 					cityArr = changeCityArr(data,_self.country,_self.provinceNum);
 					_self.cityArr = cityArr;
+					console.log(cityArr);
 					//_self.otherCity(map);
 				}
 				else{
@@ -534,8 +548,10 @@ var partnerBd = {
 				resultlast.partners.push(partTemp);
 			}			
 		}
-		
+		$('.'+_self.showLastClass).hide();
 		if(i>_self.showPartnerNum){$('.'+_self.showLastClass).show();}
+		console.log(i);
+		console.log(partLen);
 		console.log(result10);
 		_self._resultLocal = result;
 		_self.lastPartner = resultlast;
