@@ -450,6 +450,18 @@ App.page('partner_detail',function(){
 				}
 			}
             routePoiFun = _self.routePolicy(map,origin,point,isbus);
+            routePoiFun.setSearchCompleteCallback(function(results){
+                var des,ori;
+                if(results.getNumPlans()==0){
+                    if(current<11){
+                        des = addMarker(_self.levelBIconObj[current],point,map);
+                    }else{
+                        des = addMarker(_self.defaultBIconObj,point,map);
+                    }
+                    des.setOffset(new BMap.Size(0,34));
+                    ori = addMarker(_self.mySiteIconObj,origin,map);
+                }
+            });
             routePoiFun.setMarkersSetCallback(function(pois){
                 var i =0,len = pois.length,that = _self,icon1,icon2,icon1Obj = that.mySiteIconObj,icon2Obj ;
                 icon1 =new BMap.Icon(icon1Obj.url, new BMap.Size(icon1Obj.w*2,icon1Obj.h*2));
