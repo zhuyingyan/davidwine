@@ -47,9 +47,9 @@ var Jingle = J = {
     launch : function(opts){
         $.extend(this.settings,opts);
         var hasShowWelcome = window.localStorage.getItem('hasShowWelcome');
-        if(!hasShowWelcome && this.settings.showWelcome){
+        //if(!hasShowWelcome && this.settings.showWelcome){
             this.Welcome.show();
-        }
+        //}
         this.Element.init();
         this.Element.initControlGroup();
         this.Router.init();

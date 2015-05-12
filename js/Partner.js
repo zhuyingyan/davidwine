@@ -196,7 +196,7 @@ function popMap(urlArr){
 
 //返回图文数组
 function picWordArr(array){
-    var i,temp, j,wordArr, z,picArr,reg = /\uff08\u56fe\u7247\uff1a\u65b0\u95fb\u002d[1-5]\u002d[1-5]\uff09/;
+    var i,temp, j,wordArr, z,picArr,reg = /\u007b\u56fe\u7247\u007d/;
     for(i = 0;i < array.length;i++){
         temp = array[i];
         wordArr = temp.content.split(reg);
@@ -205,7 +205,7 @@ function picWordArr(array){
         for(j = 0,z = 1;j<wordArr.length||z<picArr.length;j++,z++){
             var obj = {};
             if(wordArr[j]){
-                obj.word =  wordArr[j].split("\n");
+                obj.word =  wordArr[j].split("\r");
             }
             if(picArr[z]){
                 obj.pic =  picArr[z];
@@ -244,7 +244,7 @@ function Partner(country,provinceNum,city,cityNum,object){
 	this.id = object.id;
 	this.item = object.item;
 	this.address = object.address;
-	this.desc = object.desc;
+	this.description = object.description;
 	this.duration = object.duration;
 	this.lat = object.lat;
 	this.lng = object.lng;

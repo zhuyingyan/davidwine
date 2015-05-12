@@ -361,10 +361,10 @@ App.page('partner',function(){
         //console.log("dd");
         var _self = partnerBd;
         _self.findnear = 0;
-        if(_self._resultLocal.length&&_self._resultLocal[0].cityNum!=_self.currentCityNum){
+        /*if(_self._resultLocal.length&&_self._resultLocal[0].cityNum!=_self.currentCityNum){
             //console.log("dd");
             _self._resultLocal = findCityPartners(_self.currentCityNum,_self.partnerArr);
-        }
+        }*/
     }
 });
 
@@ -417,11 +417,13 @@ App.page('partner_detail',function(){
 
     this.show = function(){
         var map = new BMap.Map("partmap"),current,local,_self = partnerBd;
+        console.log("ddd:");
+        console.log(_self._resultLocal);
         if(_self.findnear){
             _self.nearestPart(map,function(){
                 current = _self._current;
                 local = _self._resultLocal;
-                console.log(_self._resultLocal);
+
                 partnerReflash(map,current,local);
                 _self._maxLen = local.length;
                 //_self.findnear = 0;
@@ -647,15 +649,15 @@ App.page('souvenir_detail',function(){
 App.page('product',function(){
     this.init = function(){
         console.log("这里是product");
-        //var url = 'http://120.25.233.75/api/getProducts.php?callback=callback';
-        var url = 'api/getProduct.php';
+        var url = 'http://120.25.233.75/api/getProducts.php?callback=callback';
+        //var url = 'api/getProduct.php';
         J.showMask();
         $.ajax({
             url : url,
-            //dataType : 'jsonp',
+            dataType : 'jsonp',
             timeout : 20000,
             success : function(data){
-                data = JSON.parse(data);
+                //data = JSON.parse(data);
                 console.log(data);
                 Product.data =data;
                 //console.log(Product.data);
@@ -712,7 +714,7 @@ App.page('news',function(){
                 News.data =data;
                 News.maxLen = News.data.data.length;
                 picWordArr(News.data.data);
-                //console.log(News.data);
+                console.log(News.data);
                 J.hideMask();
                 J.tmpl("#newsLis",'news_template',News.data,"replace");
                 setTimeout(function(){
@@ -769,7 +771,7 @@ App.page('news_detail',function(){
     }
     this.show = function(){
         J.showMask();
-
+        J.Scroll($("#news_detail_article")).scroller.scrollTo(0,0,20);
         J.tmpl(".news_detail_wrap",'news_detail_template',News.data.data[News.current],"replace");
         setTimeout(function(){
             J.Scroll($("#news_detail_article"));
