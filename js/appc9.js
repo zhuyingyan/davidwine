@@ -192,17 +192,7 @@ App.page('index',function(){
         //$('#btn_show_welcome').on('tap', J.Welcome.show);
         var $btnMusic = $('.volume_medium'),audio,n=0;
         audio = document.createElement("audio");
-        audio.src = "music/bg.mp3";
-        var mySwiper = new Swiper('.swiper_container',{
-            mode:'vertical',
-            centeredSlides: true,
-            slidesPerView: 5,
-            watchActiveIndex: true,
-            pagination:'.swiper_wrapper',
-            paginationElementClass: 'slide_mask',
-            paginationClickable: true
-        });
-
+        audio.src = "/music/bg.mp3";
         if (audio != null && audio.canPlayType && audio.canPlayType("audio/mpeg"))
         {
             audio.play();
@@ -228,17 +218,7 @@ App.page('index',function(){
             }
             n++;
         });
-        $(document).on("visibilitychange",function(){
-            if(document.hidden){
-                audio.pause();
-            }
-            else{
-                if(n%2 == 0){
-                    audio.play();
-                }
-            }
-            //console.log(document.hidden);
-        });
+
     }
 })
 
@@ -433,7 +413,7 @@ App.page('partner_detail',function(){
         var current =current||partnerBd._current;
         var local = local||partnerBd._resultLocal;
         var map = map|| new BMap.Map("partmap");
-        var icon,_self = partnerBd,point,origin = partnerBd.mySitePoint,isbus = isbus||0,mark,routePoiFun;
+        var icon,_self = partnerBd,point,origin = partnerBd.mySitePoint,isbus = isbus||0,mark;
         point = new BMap.Point(local[current].lng,local[current].lat);
         if(origin.lng&&origin.lat){
             map.centerAndZoom(origin, 12);
@@ -445,44 +425,13 @@ App.page('partner_detail',function(){
                     isbus = 1;
                 }
             }
-            routePoiFun = _self.routePolicy(map,origin,point,isbus);
-            routePoiFun.setSearchCompleteCallback(function(results){
-                var des,ori;
-                if(results.getNumPlans()==0){
-                    if(current<11){
-                        des = addMarker(_self.levelBIconObj[current],point,map);
-                    }else{
-                        des = addMarker(_self.defaultBIconObj,point,map);
-                    }
-                    des.setOffset(new BMap.Size(0,34));
-                    ori = addMarker(_self.mySiteIconObj,origin,map);
-                }
-            });
-            routePoiFun.setMarkersSetCallback(function(pois){
-                var i =0,len = pois.length,that = _self,icon1,icon2,icon1Obj = that.mySiteIconObj,icon2Obj ;
-                icon1 =new BMap.Icon(icon1Obj.url, new BMap.Size(icon1Obj.w*2,icon1Obj.h*2));
-                icon1.imageSize=new BMap.Size(icon1Obj.w,icon1Obj.h);
-                pois[0].marker.setIcon(icon1);
-                pois[1].marker.setOffset(new BMap.Size(0,34));
-
-                if(current<11){
-                    icon2Obj = that.levelBIconObj[current];
-                    icon2 =  new BMap.Icon(icon2Obj.url, new BMap.Size(icon2Obj.w*2,icon2Obj.h*2));
-                    icon2.imageSize=new BMap.Size(icon2Obj.w,icon2Obj.h);
-                    pois[1].marker.setIcon(icon2);
-                    //mark = addMarker(_self.levelBIconObj[current],point,map);
-                }else{
-                    icon2Obj = that.defaultBIconObj;
-                    icon2 =  new BMap.Icon(icon2Obj.url, new BMap.Size(icon2Obj.w*2,icon2Obj.h*2));
-                    icon2.imageSize=new BMap.Size(icon2Obj.w,icon2Obj.h);
-                    pois[1].marker.setIcon(icon2);
-                    //pois[1].marker.setIcon(new BMap.Icon(that.defaultBIconObj.url, new BMap.Size(that.defaultBIconObj.w,that.defaultBIconObj.h)));
-                    //mark = addMarker(_self.defaultBIconObj,point,map);
-                }
-                //mark.setOffset(new BMap.Size(0,34));
-            });
-
-
+            _self.routePolicy(map,origin,point,isbus);
+            if(current<11){
+                mark = addMarker(_self.levelBIconObj[current],point,map);
+            }else{
+                mark = addMarker(_self.defaultBIconObj,point,map);
+            }
+            mark.setOffset(new BMap.Size(0,34));
             _self.showInfoWinSearch(map,local[current]);
         }
         else{
@@ -576,11 +525,7 @@ App.page('souvenir_detail',function(){
                     }
                 }
                 mess = array.join("%0d%0a");
-                $(this)[0].href="mailto:administracion.info@davidwine.es"+"?subject="+subject+"&Body="+mess;
-                J.showToast("发送中...");
-                setTimeout(function(){
-                    $("#souvenir_form_section").removeClass("active");
-                },500);
+                $(this)[0].href="mailto:sample@163.com"+"?subject="+subject+"&Body="+mess;
             }else{
                 for(i = 0;i<array.length;i++){
                     if(!inputLis[i]){
@@ -601,7 +546,10 @@ App.page('souvenir_detail',function(){
         $(".souvenir_form .btn_close").on("touchstart",function(event){
             $("#souvenir_form_section").removeClass("active");
         });
+        /*$(".btn_submit").on("touchstart",function(event){
+         console.log("dfdf");
 
+         });*/
     };
     this.show = function(){
         var slider;
@@ -636,7 +584,6 @@ App.page('souvenir_detail',function(){
     }
 
 });
-
 App.page('product',function(){
     this.init = function(){
         console.log("这里是product");
@@ -772,115 +719,83 @@ App.page('news_detail',function(){
 });
 App.page('history',function(){
     this.init = function(){
+        //J.showMask();
         Share.init2("history",History);
+        //var url = 'http://120.24.85.210/api/getHistory.php?callback=?';
+        console.log("这里是news");
+        /*$.ajax({
+         url : url,
+         dataType : 'jsonp',
+         timeout : 20000,
+         success : function(data){
+         //J.tmpl("#history_article .his_slide5_wr",'history_template',data,"replace");
+         setTimeout(function(){
+         var mySwiper = new Swiper('.history_container',{
+         slideClass:'his_slide',
+         wrapperClass:'history_wrapper',
+         mode: 'vertical',
+         slideActiveClass:'his_slide_active'
+         });
+         },500);
+         setTimeout(function(){
+         var mySwiper2 = new Swiper('.pic_slider1',{
+         slidesPerView: 'auto',
+         slideClass:'pic_slide',
+         slideActiveClass:'pic_slide_active',
+         wrapperClass:'pic_slideshow_wr',
+         loop: true,
+         autoplay: 4500,
+         autoplayDisableOnInteraction: false
+         });
+
+         var mySwiper3 = new Swiper('.pic_slider2',{
+         slidesPerView: 'auto',
+         slideClass:'pic_slide',
+         slideActiveClass:'pic_slide_active',
+         wrapperClass:'pic_slideshow_wr',
+         loop: true,
+         autoplay: 3500,
+         autoplayDisableOnInteraction: false
+         });
+         var mySwiper4 = new Swiper('.pic_slider3',{
+         slidesPerView: 'auto',
+         slideClass:'pic_slide',
+         slideActiveClass:'pic_slide_active',
+         wrapperClass:'pic_slideshow_wr',
+         loop: true,
+         autoplay: 4000,
+         autoplayDisableOnInteraction: false
+         });
+         var mySwiper5 = new Swiper('.pic_slider4',{
+         slidesPerView: 'auto',
+         slideClass:'pic_slide',
+         slideActiveClass:'pic_slide_active',
+         wrapperClass:'pic_slideshow_wr',
+         loop: true,
+         autoplay: 3000,
+         autoplayDisableOnInteraction: false
+         });
+         J.hideMask();
+         },1000);
+         }
+         });*/
+    };
+});
+
+App.page('history_detail',function(){
+    this.init = function(){
+        //J.showMask();
+        Share.init("history",History);
+        //var url = 'http://120.24.85.210/api/getHistory.php?callback=?';
+        console.log("这里是news");
         var mySwiper = new Swiper('.history_detail_container',{
             slideClass:'his_slide',
             wrapperClass:'history_wrapper',
             mode: 'vertical',
-            slideActiveClass:'his_slide_active',
-            onSlideChangeStart:function(swiper){
-                var num = swiper.activeIndex;
-                $(swiper.slides).removeClass("his_slide_now");
-                $(swiper.slides[num]).addClass("his_slide_now");
-                if(num>4){
-                    num=4;
-                }
-                hisResetAdd(num,$(".his_it"));
-            }
+            slideActiveClass:'his_slide_active'
         });
-        var moveSiz={};
-        //console.log(mySwiper);
-
-        $('#historyLis').on("touchstart",function(event){
-            var touch = event.touches[0];
-            moveSiz.x = touch.pageX;
-            moveSiz.y = touch.pageY;
-            console.log(touch.pageX+" "+touch.pageY);
-        }).on(" touchend",".his_it",function(event){
-            var num,item,pageArr = [0,1,2,3,4], i,lis=$(".his_it"),len = lis.length,slides,slen,touch = event.changedTouches[0];
-            if(Math.abs(moveSiz.x-touch.pageX)>5||Math.abs(moveSiz.y-touch.pageY)>5){
-                event.preventDefault();
-                return false;
-            }
-            item = $(event.target);
-            num =$(item).parents(".his_it").index();
-            //console.log($(item).parents(".his_it"));
-            History.current = num;
-            slides = mySwiper.slides;
-            slen = slides.length;
-
-            //console.log(mySwiper.slides);
-            mySwiper.swipeTo(pageArr[num],0);
-            $(slides[pageArr[num]]).addClass("his_slide_now");
-
-            hisResetAdd(num,$(".his_it"));
-            setTimeout(function(){
-                $("#history_article").hide();
-            },500);
-            //$("#history_article").hide();
-        });
-
-        $("#history_detail_article .btn_back").on(" touchend",function(event){
-            var lis = $(".his_it"),len = lis.length,i,slides,slen;
-            $("#history_article").show();
-            slides = mySwiper.slides;
-            slen = slides.length;
-            for(i = 0;i<slen;i++){
-                //console.log($(slides[i]).hasClass("his_slide_now"));
-                if($(slides[i]).hasClass("his_slide_now")){
-                    $(slides[i]).removeClass("his_slide_now");
-                    //console.log($(slides[i]));
-                    break;
-                }
-            }
-            for(i = 0;i<len;i++){
-                if($(lis[i]).hasClass("his_it_active")){
-                    $(lis[i]).removeClass("his_it_active");
-                }
-                if($(lis[i]).hasClass("his_it_down")){
-                    $(lis[i]).removeClass("his_it_down");
-                }
-                if($(lis[i]).hasClass("his_it_up")){
-                    $(lis[i]).removeClass("his_it_up");
-                }
-            }
-        });
-
     };
-    function hisResetAdd(current,lisArr){    //lisArr--$(".his_it")
-        var len = lisArr.length,i;
-        for(i = 0;i<len;i++){
-            if($(lisArr[i]).hasClass("his_it_active")){
-                $(lisArr[i]).removeClass("his_it_active");
-            }
-            if($(lisArr[i]).hasClass("his_it_down")){
-                $(lisArr[i]).removeClass("his_it_down");
-            }
-            if($(lisArr[i]).hasClass("his_it_up")){
-                $(lisArr[i]).removeClass("his_it_up");
-            }
-        }
-        for(i = 0;i<current;i++){
-            lisArr.eq(i).addClass("his_it_up");
-        }
-        for(i = current+1;i<len;i++){
-            lisArr.eq(i).addClass("his_it_down");
-        }
-        lisArr.eq(current).addClass("his_it_active");
-    }
-
 });
-
-/*App.page('history_detail',function(){
- this.init = function(){
- //J.showMask();
- Share.init("history",History);
- //var url = 'http://120.24.85.210/api/getHistory.php?callback=?';
- console.log("这里是news");
-
- };
- });*/
-
 
 $(function(){
     App.run();

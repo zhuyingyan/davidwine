@@ -18,7 +18,9 @@
             <div class="news_content">
                 {{each picWordArr as value i}}
                     {{if value.word}}
-                    <p class="news_content_word">{{#value.word}}</p>
+                    {{each value.word as para i}}
+                    <p class="news_content_word">{{#para}}</p>
+                    {{/each}}
                     {{/if}}
                     {{if value.pic}}
                     <div class="news_pic_wr"><img src="{{value.pic}}" alt="" class="news_pic"/></div>
