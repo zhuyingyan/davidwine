@@ -183,7 +183,7 @@ html,body{height:100%;}
 }
 .partner_map{width:100%;padding-top:107.8667%;position:relative;}
 #allmap,#allothermap{position:absolute;left:0;top:0;bottom:0;right:0;}
-.partner_item,.partner_list_item{padding:0.5rem 0;border-bottom:1px solid #2a2a27;position:relative;}
+.partner_item,.partner_list_item{padding:0.5rem 0;border-bottom:1px solid #2a2a27;position:relative;min-height: 2.125rem;}
 .partner_item:last-child,.partner_list_item:last-child{border-bottom: 0;}
 .partner_lis,.partner_other_lis,.partner_list_lis{width:80%;margin:0 auto;}
 .partner_tit{font-size:0.59375rem;color:#fefefe;line-height: 0.8125rem;width:80%;@extend .dot;@extend .heiti;}
@@ -243,7 +243,7 @@ html,body{height:100%;}
 .de_par_wr{width:100%;padding-top:56.40%;margin:0.4375rem 0;position:relative;overflow: hidden;}
 .de_par_img{width:100%;max-width: 100%;position:absolute;top:0;left:0;}
 .de_par_time{font-size:0.3125rem;line-height: 0.6rem;color:#999999;text-align: center;}
-.de_par_mes{padding-left:0.78125rem;font-size:0.53125rem;line-height:0.78125rem;@extend .heiti;color:#cccccc;
+.de_par_mes{padding-left:0.78125rem;font-size:0.53125rem;line-height:0.78125rem;@extend .heiti;color:#cccccc;min-height:0.78125rem;
   margin:0.84375rem 0;position:relative;font-family: "palmassiregular","\534E\6587\7EC6\9ED1";text-align: justify;
   &:before{display: block;position: absolute;font-size:0.63125rem;line-height:0.78125rem;color:#cccccc;
     top:0;left:0;width:0.625rem;height:0.625rem;@extend .iconfont;}
@@ -251,7 +251,11 @@ html,body{height:100%;}
 .mes1:before{content:"\e600";}
 .mes2:before{content:"\e608";}
 .mes3:before{content:"\e605";}
+.mes9:before{content:"";display:none;}
+.mes9{padding-left:0;}
+.mes10:before{content:"\e61f";}
 .mes2{padding-right:1.125rem;word-break: break-all;}
+.mes10 a{color:#c8001c;line-height:0.78125rem;}
 .btn_tele{width:1.125rem;height: 1.125rem;background: #2C2C2C; position: absolute;top:0;right:0;display:block;
   &:before{content:"\e609";display: block;width:100%;height: 100%;line-height: 1.125rem;font-size:0.6rem;text-align:center;
     @extend .iconfont;

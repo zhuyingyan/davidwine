@@ -601,6 +601,7 @@ var partnerBd = {
 			$.ajax({
 				url : url,
 				timeout : 20000,
+				dataType : 'jsonp',
 				success : function(data){
 					_self.data = data.data;
 					_self.findNearestPart(map,callback);
@@ -617,20 +618,22 @@ var partnerBd = {
         geolocation.getCurrentPosition(function(r){
 			_self.mySitePoint = point = r.point;
 			if(!_self.partnerArr.length){
-				//寻找中国位置
+				/*//寻找中国位置
 				for(count = 0;count<data.length;count++){
 					if(data[count].country.toLowerCase().indexOf(_self.country)!=-1){
 						_self.courtryNum = count;
 					}
-				}
+				}*/
 
 				var geoc = new BMap.Geocoder();
 				geoc.getLocation(point, function(rs){
 					var addComp = rs.addressComponents;
 					cityName = addComp.city;
+					province = addComp.province;
+					_self.provinceNum = findProvinceNum(_self.data,province);
 					_self.siteCity = cityName;
-					cityData=_self.data[_self.courtryNum];					
-					_self.partnerArr = changePartnerArr(cityData.citylist,_self.country,_self.courtryNum);
+					cityData=_self.data[_self.provinceNum];
+					_self.partnerArr = changePartnerArr(data,_self.country,_self.provinceNum);
 					countPartArrDis(map,point,_self.partnerArr);
 					// 按距离排序
 					_self.partnerArr.sort(function(a,b){

@@ -44,8 +44,12 @@
 			<div class="partner_item">
 				<a href="#partner_detail_section"  data-target="section">
 					<h2 class="partner_tit"><span class="rank">{{value.item+1}}.</span><span class="value.name">{{value.name}}</span></h2>
+					{{if value.phone}}
 					<p class="tele">{{value.phone}}</p>
-					<p class="addr">{{value.desc}}</p>
+					{{/if}}
+					{{if value.description}}
+					<p class="addr">{{value.description}}</p>
+					{{/if}}
 					{{if  value.distance>=1000}}
 					<span class="distance">{{(value.distance/1000).toFixed(1)}}km</span>
 					{{/if}}

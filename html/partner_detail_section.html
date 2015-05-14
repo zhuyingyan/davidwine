@@ -25,11 +25,7 @@
             </div>
             <!--<p class="pull-scroll">继续上拉到下一个商户</p>-->
 
-            <!--{{if wechat}}
-            <p class="de_par_mes mes9">{{wechat}}</p>
-            {{if page}}
-            <p class="de_par_mes mes10"><a href="{{page}}">{{page}}</a></p>
-            {{/if}}-->
+
         </div>
     </article>
 	<article class="partner_route" id="partner_route_article" style="display:none;">
@@ -75,9 +71,16 @@
         {{if phone}}
         <p class="de_par_mes mes2"><span>{{phone}}</span><a class="btn_tele" href="tel:{{phone}}"></a></p>
         {{/if}}
+        {{if page}}
+        <p class="de_par_mes mes10"><a href="{{page}}">{{page}}</a></p>
+        {{/if}}
+        {{if wechat}}
+        <p class="de_par_mes mes9">微信公众号：<a href="###">{{wechat}}</a></p>
+        {{/if}}
         {{if description}}
         <p class="de_par_mes mes3">{{description}}</p>
         {{/if}}
+
         {{if pics}}
         <div class="de_par_eve">
             <p class="de_img_tit">Events.</p>
